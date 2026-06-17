@@ -1,4 +1,5 @@
 import "./App.css";
+import "./auth/auth.css";
 import {
   BrowserRouter as Router,
   Routes,
@@ -7,8 +8,8 @@ import {
 } from "react-router-dom";
 import Expenses from "./expenses/Expenses.jsx";
 import { useAuth } from "./auth/context/AuthContext.jsx";
-import Login from "./auth/login/Login.jsx";
-import Signup from "./auth/signup/Signup.jsx";
+import Login from "./auth/Login.jsx";
+import Signup from "./auth/Signup.jsx";
 
 function App() {
   const { isAuthenticated } = useAuth();
