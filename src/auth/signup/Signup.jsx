@@ -1,7 +1,30 @@
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+
 export default function Signup() {
+  const navigate = useNavigate();
+  const { setAccessToken } = useAuth();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    try {
+      const res = await axios.post("api/auth/register", {
+        name: formData.get("fullName"),
+        email: formData.get("email"),
+        password: formData.get("password"),
+      });
+      setAccessToken(res.data.accessToken);
+      navigate("/dashboard");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-2 w-full max-w-sm mx-auto">
-      <form action="" className="flex flex-col gap-2">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-2">
         <label>Full Name</label>
         <input
           type="text"

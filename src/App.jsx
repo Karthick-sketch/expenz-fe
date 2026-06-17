@@ -8,6 +8,7 @@ import {
 import Expenses from "./expenses/Expenses.jsx";
 import { useAuth } from "./auth/context/AuthContext.jsx";
 import Login from "./auth/login/Login.jsx";
+import Signup from "./auth/signup/Signup.jsx";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -30,10 +31,12 @@ function App() {
               path="/incomes"
               element={<Expenses sectionId="3" section="Incomes" />}
             />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </>
         ) : (
           <>
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
             <Route path="*" element={<Navigate to="/login" replace />} />
           </>
         )}
