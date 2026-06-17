@@ -18,48 +18,70 @@ export default function Signup() {
       setAccessToken(res.data.accessToken);
       navigate("/dashboard");
     } catch (error) {
-      console.log(error);
+      console.error("Signup failed:", error?.response?.status ?? error.message);
     }
   };
 
   return (
-    <div className="auth-card">
-      <h2 className="auth-title text-center">Expenz</h2>
-      <h3 className="auth-title">Signup</h3>
-      <form onSubmit={handleSubmit} className="auth-form">
-        <label htmlFor="fullName">Full Name</label>
-        <input
-          id="fullName"
-          type="text"
-          name="fullName"
-          className="auth-input"
-          required
-        />
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="text"
-          name="email"
-          className="auth-input"
-          required
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          name="password"
-          className="auth-input"
-          required
-        />
-        <button type="submit" className="auth-button">
-          Signup
-        </button>
-      </form>
-      <div className="text-center mt-4">
-        <p className="text-white">
+    <div className="auth-wrapper">
+      <div className="auth-card">
+        {/* Brand */}
+        <span className="auth-brand-icon">💸</span>
+        <h1 className="auth-brand">Expenz</h1>
+        <h2 className="auth-title">Create your account</h2>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="auth-field">
+            <label htmlFor="fullName">Full Name</label>
+            <input
+              id="fullName"
+              type="text"
+              name="fullName"
+              className="auth-input"
+              placeholder="Jane Doe"
+              autoComplete="name"
+              required
+            />
+          </div>
+
+          <div className="auth-field">
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              className="auth-input"
+              placeholder="you@example.com"
+              autoComplete="email"
+              required
+            />
+          </div>
+
+          <div className="auth-field">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              name="password"
+              className="auth-input"
+              placeholder="Min. 8 characters"
+              autoComplete="new-password"
+              minLength={8}
+              required
+            />
+          </div>
+
+          <button type="submit" className="auth-button">
+            Create Account
+          </button>
+        </form>
+
+        {/* Footer */}
+        <p className="auth-footer">
           Already have an account?{" "}
           <Link to="/login" className="auth-link">
-            Login
+            Sign in
           </Link>
         </p>
       </div>

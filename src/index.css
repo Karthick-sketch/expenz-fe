@@ -10,7 +10,8 @@ body {
   margin-right: auto;
 }
 
-h2 {
+/* Scoped to dashboard/app pages — auth pages override with their own card styles */
+h2:not(.auth-brand):not(.auth-title) {
   color: #395886;
 }
 
