@@ -16,7 +16,7 @@ export default function Signup() {
         password: formData.get("password"),
       });
       setAccessToken(res.data.accessToken);
-      navigate("/dashboard");
+      navigate("/expenses");
     } catch (error) {
       console.error("Signup failed:", error?.response?.status ?? error.message);
     }

@@ -19,20 +19,8 @@ function App() {
       <Routes>
         {isAuthenticated ? (
           <>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route
-              path="/dashboard"
-              element={<Expenses sectionId="1" section="Dashboard" />}
-            />
-            <Route
-              path="/expenses"
-              element={<Expenses sectionId="2" section="Expenses" />}
-            />
-            <Route
-              path="/incomes"
-              element={<Expenses sectionId="3" section="Incomes" />}
-            />
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/" element={<Navigate to="/expenses" replace />} />
+            <Route path="/expenses" element={<Expenses />} />
           </>
         ) : (
           <>

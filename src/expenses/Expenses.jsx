@@ -1,29 +1,169 @@
 import { useEffect, useState } from "react";
 import api from "../auth/interceptor/api";
-import LeftNavbar from "./components/LeftNavbar";
 import ExpensesDuration from "./components/ExpensesDuration";
 import ExpensesContainer from "./components/ExpensesContainer";
+import ExpensePieChart from "./expense-pie-chart/ExpensePieChart";
+import ExpenseForm from "./expense-form/ExpenseForm";
+import "./Expenses.css";
 
 function Expenses() {
   const [expenses, setExpenses] = useState([]);
+  const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    const fetchExpenses = async () => {
+  const fetchExpenses = async () => {
+    try {
       const response = await api.get("/expenses/this-month");
       setExpenses(response.data);
-    };
+    } catch (err) {
+      console.error(
+        "Failed to fetch expenses:",
+        err?.response?.status ?? err.message,
+      );
+    }
+  };
+
+  useEffect(() => {
     fetchExpenses();
   }, []);
 
+  // Derived stats
+  const totalExpenses = expenses
+    .filter((e) => !e.income)
+    .reduce((sum, e) => sum + Number(e.amount), 0);
+
+  const totalIncome = expenses
+    .filter((e) => e.income)
+    .reduce((sum, e) => sum + Number(e.amount), 0);
+
+  const balance = totalIncome - totalExpenses;
+
+  // Build pie chart data from categories
+  const categoryMap = {};
+  expenses
+    .filter((e) => !e.income)
+    .forEach((e) => {
+      const cat = e.category || "Other";
+      categoryMap[cat] = (categoryMap[cat] || 0) + Number(e.amount);
+    });
+  const pieData = Object.entries(categoryMap).map(([name, value]) => ({
+    name: name.charAt(0).toUpperCase() + name.slice(1),
+    value,
+  }));
+
   return (
-    <article className="expenses-page">
-      <LeftNavbar />
-      <div>
-        <h2>Expenses</h2>
+    <div className="app-shell">
+      {/* Sidebar */}
+      <aside className="sidebar">
+        <div className="sidebar-brand">💸 Expenz</div>
+        <nav className="sidebar-nav">
+          <a href="/expenses" className="sidebar-link active">
+            <span className="sidebar-icon">📋</span> Expenses
+          </a>
+          <a href="#" className="sidebar-link">
+            <span className="sidebar-icon">💰</span> Incomes
+          </a>
+          <a href="#" className="sidebar-link">
+            <span className="sidebar-icon">📊</span> Reports
+          </a>
+          <a href="#" className="sidebar-link">
+            <span className="sidebar-icon">⚙️</span> Settings
+          </a>
+        </nav>
+        <div className="sidebar-logout">
+          <button className="sidebar-link" style={{ color: "#ff4d6d" }}>
+            <span className="sidebar-icon">🚪</span> Logout
+          </button>
+        </div>
+      </aside>
+
+      {/* Main */}
+      <main className="main-content">
+        {/* Header */}
+        <div className="page-header">
+          <div>
+            <h1>Expenses</h1>
+            <p className="subtitle">Track and manage your spending</p>
+          </div>
+          <button
+            className="btn-add-expense"
+            id="btn-open-expense-form"
+            onClick={() => setShowForm(true)}
+          >
+            ＋ Add Expense
+          </button>
+        </div>
+
+        {/* Month navigator */}
         <ExpensesDuration />
-        <ExpensesContainer expenses={expenses} />
-      </div>
-    </article>
+
+        {/* Stats */}
+        <div className="stats-row">
+          <div className="stat-card">
+            <span className="stat-label">Balance</span>
+            <span
+              className={`stat-value ${balance >= 0 ? "income" : "expense"}`}
+            >
+              {balance >= 0 ? "+" : "-"}₹{Math.abs(balance).toLocaleString()}
+            </span>
+            <span className="stat-sub">This month</span>
+          </div>
+          <div className="stat-card">
+            <span className="stat-label">Total Spent</span>
+            <span className="stat-value expense">
+              ₹{totalExpenses.toLocaleString()}
+            </span>
+            <span className="stat-sub">
+              {expenses.filter((e) => !e.income).length} transactions
+            </span>
+          </div>
+          <div className="stat-card">
+            <span className="stat-label">Total Income</span>
+            <span className="stat-value income">
+              ₹{totalIncome.toLocaleString()}
+            </span>
+            <span className="stat-sub">
+              {expenses.filter((e) => e.income).length} transactions
+            </span>
+          </div>
+        </div>
+
+        {/* Chart + List */}
+        <div className="dashboard-grid">
+          <div className="card chart-card">
+            <div className="card-header">
+              <span className="card-title">Spending Breakdown</span>
+            </div>
+            <div className="card-body">
+              <ExpensePieChart expenses={pieData} />
+            </div>
+          </div>
+
+          <div className="card">
+            <div className="card-header">
+              <span className="card-title">Transactions</span>
+            </div>
+            <div className="card-body">
+              <ExpensesContainer
+                expenses={expenses}
+                onExpenseAdded={fetchExpenses}
+                onOpenForm={() => setShowForm(true)}
+              />
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* Expense Form Modal */}
+      {showForm && (
+        <ExpenseForm
+          onClose={() => setShowForm(false)}
+          onSuccess={() => {
+            setShowForm(false);
+            fetchExpenses();
+          }}
+        />
+      )}
+    </div>
   );
 }
 

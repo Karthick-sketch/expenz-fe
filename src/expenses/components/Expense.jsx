@@ -1,50 +1,72 @@
 import { useState } from "react";
 
-function expandDescription(id, isExpanded) {
-  try {
-    let expandIcon = document.getElementById(`expand-img-${id}`);
-    expandIcon.src = `./src/assets/${isExpanded ? "down" : "right"}.svg`;
+function Expense({ expense, dotColor }) {
+  const [expanded, setExpanded] = useState(false);
 
-    let container = document.getElementById(
-      `expense-description-container-${id}`
-    );
-    container.style.visibility = isExpanded ? "visible" : "hidden";
-    container.style.display = isExpanded ? "block" : "none";
-    return !isExpanded;
-  } catch (error) {
-    console.error(error);
-    return isExpanded;
-  }
-}
+  const { id, title, amount, date, description, income, category } = expense;
 
-function Expense(props) {
-  const [description, setDescription] = useState(false);
+  const displayAmount = `${income ? "+" : "-"}₹${Number(amount).toLocaleString()}`;
+  const displayDate = date
+    ? new Date(date).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    : "";
 
   return (
-    <>
-      <button
-        className="expense-expand btn-style-default"
-        onClick={() => setDescription(expandDescription(props.id, description))}
+    <li>
+      <div
+        className="expense-row"
+        id={`expense-row-${id}`}
+        onClick={() => setExpanded((prev) => !prev)}
       >
-        <img
-          src="./src/assets/right.svg"
-          alt="expand"
-          id={`expand-img-${props.id}`}
+        {/* Category colour dot */}
+        <span
+          className="expense-dot"
+          style={{ background: dotColor }}
+          title={category ?? (income ? "Income" : "Other")}
         />
-      </button>
-      <div>
-        <span className="expense-name">{props.title}</span>
-        <span className="expense-amount">{props.amount}</span>
-        <span className="expense-date">{props.date}</span>
+
+        {/* Title + meta */}
+        <div className="expense-main">
+          <div className="expense-title-text">{title}</div>
+          <div className="expense-meta">
+            {category && (
+              <span style={{ textTransform: "capitalize" }}>{category}</span>
+            )}
+            {category && displayDate && " · "}
+            {displayDate}
+          </div>
+        </div>
+
+        {/* Amount */}
+        <span
+          className={`expense-amount-text ${income ? "is-income" : "is-expense"}`}
+        >
+          {displayAmount}
+        </span>
+
+        {/* Actions */}
+        <div className="expense-actions" onClick={(e) => e.stopPropagation()}>
+          <button
+            className="expense-action-btn danger"
+            id={`btn-delete-expense-${id}`}
+            aria-label="Delete expense"
+            title="Delete"
+          >
+            🗑
+          </button>
+        </div>
       </div>
-      <button className="expense-delete btn-style-default">
-        <img src="./src/assets/delete.svg" alt="delete" />
-      </button>
-      <div id={`expense-description-container-${props.id}`}>
-        <hr />
-        <p className="expense-description">{props.description}</p>
-      </div>
-    </>
+
+      {/* Expandable description */}
+      {description && (
+        <div className={`expense-description-panel ${expanded ? "open" : ""}`}>
+          <div className="expense-description-inner">{description}</div>
+        </div>
+      )}
+    </li>
   );
 }
 

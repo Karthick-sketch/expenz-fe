@@ -1,26 +1,65 @@
 import Expense from "./Expense";
 
-function ExpensesContainer({ expenses }) {
+const CATEGORY_COLORS = {
+  // Expense categories
+  food: "#f97316",
+  shopping: "#8b5cf6",
+  travel: "#3b82f6",
+  bills: "#ef4444",
+  entertainment: "#ec4899",
+  health: "#10b981",
+  vacation: "#06b6d4",
+  // Income categories
+  salary: "#00d4aa",
+  freelance: "#34d399",
+  business: "#a3e635",
+  bonus: "#fbbf24",
+  investment: "#38bdf8",
+  rental: "#818cf8",
+  gift: "#f472b6",
+  // Fallback
+  other: "#6b7280",
+};
+
+function ExpensesContainer({ expenses, onOpenForm }) {
+  if (expenses.length === 0) {
+    return (
+      <div className="empty-state">
+        <div className="empty-icon">🗒️</div>
+        <p>No transactions this month.</p>
+        <p>
+          <button
+            onClick={onOpenForm}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#6c63ff",
+              cursor: "pointer",
+              fontWeight: 600,
+              fontSize: "inherit",
+              padding: 0,
+            }}
+          >
+            Add your first expense →
+          </button>
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <section className="expenses-container">
-      {expenses.length === 0 ? (
-        <p>No expenses found</p>
-      ) : (
-        <ul className="expenses">
-          {expenses.map((expense) => (
-            <li key={expense.id} className="expense">
-              <Expense
-                id={expense.id}
-                title={expense.title}
-                amount={expense.amount}
-                date={expense.date}
-                description={expense.description}
-              />
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
+    <ul className="expenses-list">
+      {expenses.map((expense) => (
+        <Expense
+          key={expense.id}
+          expense={expense}
+          dotColor={
+            CATEGORY_COLORS[expense.category?.toLowerCase()] ??
+            CATEGORY_COLORS.other
+          }
+        />
+      ))}
+    </ul>
   );
 }
 

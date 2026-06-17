@@ -15,7 +15,7 @@ export default function Login() {
         password: formData.get("password"),
       });
       setAccessToken(response.data.accessToken);
-      navigate("/dashboard");
+      navigate("/expenses");
     } catch (error) {
       console.error("Login failed:", error?.response?.status ?? error.message);
     }

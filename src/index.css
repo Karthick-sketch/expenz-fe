@@ -1,18 +1,20 @@
 @import "tailwindcss";
 
-/* Existing custom styles */
-body {
-  background-color: #d5deef;
-  max-width: 85%;
-  margin-top: 32px;
-  margin-bottom: 0;
-  margin-left: auto;
-  margin-right: auto;
+/* ---- Base reset ---- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* Scoped to dashboard/app pages — auth pages override with their own card styles */
-h2:not(.auth-brand):not(.auth-title) {
-  color: #395886;
+body {
+  /* The app-shell (dark dashboard) and auth-wrapper manage their own sizing.
+     Keep body as a neutral full-viewport canvas. */
+  min-height: 100vh;
+  background-color: #0f1117;
+  font-family: 'Inter', sans-serif;
 }
 
 ul {
