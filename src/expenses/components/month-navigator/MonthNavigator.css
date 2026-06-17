@@ -1,0 +1,33 @@
+/* ---- Month navigator ---- */
+.month-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.35rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.month-nav-btn {
+  background: none;
+  border: none;
+  color: var(--text-2);
+  cursor: pointer;
+  padding: 0.1rem 0.35rem;
+  border-radius: 50%;
+  transition:
+    background var(--transition),
+    color var(--transition);
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.month-nav-btn:hover {
+  background: var(--border);
+  color: var(--text-1);
+}

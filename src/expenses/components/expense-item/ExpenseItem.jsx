@@ -1,6 +1,7 @@
 import { useState } from "react";
+import "./ExpenseItem.css";
 
-function Expense({ expense, dotColor }) {
+function ExpenseItem({ expense, dotColor }) {
   const [expanded, setExpanded] = useState(false);
 
   const { id, title, amount, date, description, income, category } = expense;
@@ -70,4 +71,4 @@ function Expense({ expense, dotColor }) {
   );
 }
 
-export default Expense;
+export default ExpenseItem;

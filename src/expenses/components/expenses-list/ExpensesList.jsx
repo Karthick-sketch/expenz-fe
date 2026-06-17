@@ -1,27 +1,8 @@
-import Expense from "./Expense";
+import ExpenseItem from "../expense-item/ExpenseItem";
+import { CATEGORY_COLORS } from "../../constants/categories";
+import "./ExpensesList.css";
 
-export const CATEGORY_COLORS = {
-  // Expense categories
-  food: "#f97316",
-  shopping: "#8b5cf6",
-  travel: "#3b82f6",
-  bills: "#ef4444",
-  entertainment: "#ec4899",
-  health: "#10b981",
-  vacation: "#06b6d4",
-  // Income categories
-  salary: "#00d4aa",
-  freelance: "#34d399",
-  business: "#a3e635",
-  bonus: "#fbbf24",
-  investment: "#38bdf8",
-  rental: "#818cf8",
-  gift: "#f472b6",
-  // Fallback
-  other: "#6b7280",
-};
-
-function ExpensesContainer({ expenses, onOpenForm }) {
+function ExpensesList({ expenses, onOpenForm }) {
   if (expenses.length === 0) {
     return (
       <div className="empty-state">
@@ -48,13 +29,14 @@ function ExpensesContainer({ expenses, onOpenForm }) {
   }
 
   const sortedExpenses = [...expenses].sort(
-    (a, b) => new Date(b.date || b.dateAdded) - new Date(a.date || a.dateAdded)
+    (a, b) =>
+      new Date(b.date || b.dateAdded) - new Date(a.date || a.dateAdded),
   );
 
   return (
     <ul className="expenses-list">
       {sortedExpenses.map((expense) => (
-        <Expense
+        <ExpenseItem
           key={expense.id}
           expense={expense}
           dotColor={
@@ -67,4 +49,4 @@ function ExpensesContainer({ expenses, onOpenForm }) {
   );
 }
 
-export default ExpensesContainer;
+export default ExpensesList;

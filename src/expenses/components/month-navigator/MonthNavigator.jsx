@@ -1,7 +1,7 @@
 import { useState } from "react";
-import "../Expenses.css";
+import "./MonthNavigator.css";
 
-function ExpensesDuration() {
+function MonthNavigator() {
   const [date, setDate] = useState(new Date());
 
   const formattedDate = date.toLocaleDateString("en-US", {
@@ -44,4 +44,4 @@ function ExpensesDuration() {
   );
 }
 
-export default ExpensesDuration;
+export default MonthNavigator;

@@ -1,28 +1,10 @@
 import { useState } from "react";
-import api from "../../auth/interceptor/api";
-import "../Expenses.css";
-
-const EXPENSE_CATEGORIES = [
-  { value: "food", label: "🍔 Food" },
-  { value: "shopping", label: "🛍 Shopping" },
-  { value: "travel", label: "✈️ Travel" },
-  { value: "bills", label: "🧾 Bills" },
-  { value: "entertainment", label: "🎬 Entertainment" },
-  { value: "health", label: "🏥 Health" },
-  { value: "vacation", label: "🏖 Vacation" },
-  { value: "other", label: "📦 Other" },
-];
-
-const INCOME_CATEGORIES = [
-  { value: "salary", label: "💼 Salary" },
-  { value: "freelance", label: "🖥 Freelance" },
-  { value: "business", label: "🏢 Business" },
-  { value: "bonus", label: "🎁 Bonus" },
-  { value: "investment", label: "📈 Investment" },
-  { value: "rental", label: "🏠 Rental" },
-  { value: "gift", label: "🎀 Gift" },
-  { value: "other", label: "📦 Other" },
-];
+import api from "../../../auth/interceptor/api";
+import {
+  EXPENSE_CATEGORIES,
+  INCOME_CATEGORIES,
+} from "../../constants/categories";
+import "./ExpenseFormModal.css";
 
 const INITIAL = {
   title: "",
@@ -34,7 +16,7 @@ const INITIAL = {
   dateAdded: new Date().toISOString().split("T")[0],
 };
 
-export default function ExpenseForm({ onClose, onSuccess }) {
+export default function ExpenseFormModal({ onClose, onSuccess }) {
   const [expense, setExpense] = useState(INITIAL);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

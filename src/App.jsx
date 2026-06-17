@@ -6,7 +6,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Expenses from "./expenses/Expenses.jsx";
+import ExpensesPage from "./expenses/ExpensesPage.jsx";
 import { useAuth } from "./auth/context/AuthContext.jsx";
 import Login from "./auth/Login.jsx";
 import Signup from "./auth/Signup.jsx";
@@ -20,7 +20,7 @@ function App() {
         {isAuthenticated ? (
           <>
             <Route path="/" element={<Navigate to="/expenses" replace />} />
-            <Route path="/expenses" element={<Expenses />} />
+            <Route path="/expenses" element={<ExpensesPage />} />
           </>
         ) : (
           <>

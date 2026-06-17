@@ -6,7 +6,8 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { CATEGORY_COLORS } from "../components/ExpensesContainer";
+import { CATEGORY_COLORS } from "../../constants/categories";
+import "./ExpensePieChart.css";
 
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
@@ -22,7 +23,13 @@ const CustomTooltip = ({ active, payload }) => {
         }}
       >
         <strong>{payload[0].name}</strong>
-        <div>₹{Number(payload[0].value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+        <div>
+          ₹
+          {Number(payload[0].value).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
+        </div>
       </div>
     );
   }
@@ -64,10 +71,13 @@ export default function ExpensePieChart({ expenses }) {
           }
           labelLine={true}
         >
-          {expenses.map((entry, index) => (
+          {expenses.map((entry) => (
             <Cell
               key={`cell-${entry.name}`}
-              fill={CATEGORY_COLORS[entry.name.toLowerCase()] || CATEGORY_COLORS.other}
+              fill={
+                CATEGORY_COLORS[entry.name.toLowerCase()] ||
+                CATEGORY_COLORS.other
+              }
               stroke="transparent"
             />
           ))}

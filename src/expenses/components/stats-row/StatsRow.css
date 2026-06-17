@@ -1,0 +1,47 @@
+/* ---- Stats row ---- */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  transition: border-color var(--transition);
+}
+
+.stat-card:hover {
+  border-color: var(--border-hover);
+}
+
+.stat-card .stat-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.stat-card .stat-value {
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--text-1);
+}
+
+.stat-card .stat-value.expense {
+  color: var(--danger);
+}
+.stat-card .stat-value.income {
+  color: var(--income);
+}
+
+.stat-card .stat-sub {
+  font-size: 0.78rem;
+  color: var(--text-3);
+}

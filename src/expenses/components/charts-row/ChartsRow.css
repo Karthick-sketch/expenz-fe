@@ -1,0 +1,16 @@
+/* ---- Charts row layout ---- */
+.charts-row {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.charts-row > .card {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 960px) {
+  .charts-row {
+    flex-direction: column;
+  }
+}
