@@ -1,34 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import api from "../auth/interceptor/api";
 import LeftNavbar from "./components/LeftNavbar";
 import ExpensesDuration from "./components/ExpensesDuration";
 import ExpensesContainer from "./components/ExpensesContainer";
 
-const expenseItems = [
-  {
-    id: 1,
-    title: "Buy clothes",
-    amount: "-₹200",
-    date: "01-01-2024",
-    description: "Buy clothes for Pongal celebration.",
-  },
-  {
-    id: 2,
-    title: "Buy clothes",
-    amount: "-₹200",
-    date: "01-01-2024",
-    description: "Buy clothes for Pongal celebration.",
-  },
-  {
-    id: 3,
-    title: "Buy clothes",
-    amount: "-₹200",
-    date: "01-01-2024",
-    description: "Buy clothes for Pongal celebration.",
-  },
-];
-
 function Expenses() {
-  const [expenses, setExpenses] = useState(expenseItems);
+  const [expenses, setExpenses] = useState([]);
+
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      const response = await api.get("/expenses/this-month");
+      setExpenses(response.data);
+    };
+    fetchExpenses();
+  }, []);
 
   return (
     <article className="expenses-page">
@@ -36,7 +21,7 @@ function Expenses() {
       <div>
         <h2>Expenses</h2>
         <ExpensesDuration />
-        <ExpensesContainer data={expenses} />
+        <ExpensesContainer expenses={expenses} />
       </div>
     </article>
   );

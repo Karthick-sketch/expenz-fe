@@ -1,21 +1,25 @@
 import Expense from "./Expense";
 
-function ExpensesContainer({ data }) {
+function ExpensesContainer({ expenses }) {
   return (
     <section className="expenses-container">
-      <ul className="expenses">
-        {data.map((expense) => (
-          <li key={expense.id} className="expense">
-            <Expense
-              id={expense.id}
-              title={expense.title}
-              amount={expense.amount}
-              date={expense.date}
-              description={expense.description}
-            />
-          </li>
-        ))}
-      </ul>
+      {expenses.length === 0 ? (
+        <p>No expenses found</p>
+      ) : (
+        <ul className="expenses">
+          {expenses.map((expense) => (
+            <li key={expense.id} className="expense">
+              <Expense
+                id={expense.id}
+                title={expense.title}
+                amount={expense.amount}
+                date={expense.date}
+                description={expense.description}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   );
 }

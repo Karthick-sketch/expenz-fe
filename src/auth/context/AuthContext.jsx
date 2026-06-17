@@ -1,11 +1,21 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { setAccessToken as setTokenStore, clearAccessToken as clearTokenStore } from "../interceptor/tokenStore.js";
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [accessToken, setAccessToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Sync token with tokenStore so the Axios interceptor has access to it
+  useEffect(() => {
+    if (accessToken) {
+      setTokenStore(accessToken);
+    } else {
+      clearTokenStore();
+    }
+  }, [accessToken]);
 
   // On mount, attempt a silent refresh to restore the session.
   // The refresh token lives in an httpOnly cookie set by the server,
