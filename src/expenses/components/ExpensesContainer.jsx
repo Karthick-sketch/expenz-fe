@@ -1,6 +1,6 @@
 import Expense from "./Expense";
 
-const CATEGORY_COLORS = {
+export const CATEGORY_COLORS = {
   // Expense categories
   food: "#f97316",
   shopping: "#8b5cf6",
@@ -47,9 +47,13 @@ function ExpensesContainer({ expenses, onOpenForm }) {
     );
   }
 
+  const sortedExpenses = [...expenses].sort(
+    (a, b) => new Date(b.date || b.dateAdded) - new Date(a.date || a.dateAdded)
+  );
+
   return (
     <ul className="expenses-list">
-      {expenses.map((expense) => (
+      {sortedExpenses.map((expense) => (
         <Expense
           key={expense.id}
           expense={expense}

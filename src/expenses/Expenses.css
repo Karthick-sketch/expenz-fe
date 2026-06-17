@@ -215,18 +215,26 @@
   color: var(--text-3);
 }
 
-/* ---- Dashboard grid (chart + list) ---- */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 420px 1fr;
+/* ---- Dashboard layout (charts + list) ---- */
+.charts-row {
+  display: flex;
   gap: 1.5rem;
-  align-items: start;
+}
+
+.charts-row > .card {
+  flex: 1;
+  min-width: 0;
 }
 
 @media (max-width: 960px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr;
+  .charts-row {
+    flex-direction: column;
   }
+}
+
+.transactions-section {
+  /* Separating it visually from the top charts */
+  margin-top: 0;
 }
 
 /* ---- Card shell (shared) ---- */

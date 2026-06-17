@@ -5,7 +5,7 @@ function Expense({ expense, dotColor }) {
 
   const { id, title, amount, date, description, income, category } = expense;
 
-  const displayAmount = `${income ? "+" : "-"}₹${Number(amount).toLocaleString()}`;
+  const displayAmount = `${income ? "+" : "-"}₹${Number(amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   const displayDate = date
     ? new Date(date).toLocaleDateString("en-IN", {
         day: "2-digit",
