@@ -5,25 +5,38 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Expenses from "./Expenses/Expenses";
+import Expenses from "./expenses/Expenses.jsx";
+import { useAuth } from "./auth/context/AuthContext.jsx";
+import Login from "./auth/login/Login.jsx";
 
 function App() {
+  const { isAuthenticated } = useAuth();
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" />} />
-        <Route
-          path="/dashboard"
-          element={<Expenses sectionId="1" section="Dashboard" />}
-        />
-        <Route
-          path="/expenses"
-          element={<Expenses sectionId="2" section="Expenses" />}
-        />
-        <Route
-          path="/incomes"
-          element={<Expenses sectionId="3" section="Incomes" />}
-        />
+        {isAuthenticated ? (
+          <>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route
+              path="/dashboard"
+              element={<Expenses sectionId="1" section="Dashboard" />}
+            />
+            <Route
+              path="/expenses"
+              element={<Expenses sectionId="2" section="Expenses" />}
+            />
+            <Route
+              path="/incomes"
+              element={<Expenses sectionId="3" section="Incomes" />}
+            />
+          </>
+        ) : (
+          <>
+            <Route path="/login" element={<Login />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </>
+        )}
       </Routes>
     </Router>
   );
