@@ -25,10 +25,35 @@
   --transition: 0.2s ease;
 }
 
+/* ---- Global Scrollbar ---- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-3);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-2) var(--bg);
+}
+
 /* ---- App shell ---- */
 .app-shell {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   background: var(--bg);
   font-family: "Inter", sans-serif;
   color: var(--text-1);

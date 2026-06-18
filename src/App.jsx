@@ -10,6 +10,7 @@ import ExpensesPage from "./expenses/ExpensesPage.jsx";
 import { useAuth } from "./auth/context/AuthContext.jsx";
 import Login from "./auth/Login.jsx";
 import Signup from "./auth/Signup.jsx";
+import PageNotFound from "./util/page-not-found/PageNotFound.jsx";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -21,6 +22,15 @@ function App() {
           <>
             <Route path="/" element={<Navigate to="/expenses" replace />} />
             <Route path="/expenses" element={<ExpensesPage />} />
+            <Route
+              path="/login"
+              element={<Navigate to="/expenses" replace />}
+            />
+            <Route
+              path="/signup"
+              element={<Navigate to="/expenses" replace />}
+            />
+            <Route path="*" element={<PageNotFound />} />
           </>
         ) : (
           <>
