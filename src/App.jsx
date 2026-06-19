@@ -7,6 +7,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import ExpensesPage from "./expenses/ExpensesPage.jsx";
+import DashboardPage from "./expenses/dashboard-page/DashboardPage.jsx";
 import { useAuth } from "./auth/context/AuthContext.jsx";
 import Login from "./auth/Login.jsx";
 import Signup from "./auth/Signup.jsx";
@@ -20,7 +21,8 @@ function App() {
       <Routes>
         {isAuthenticated ? (
           <>
-            <Route path="/" element={<Navigate to="/expenses" replace />} />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/expenses" element={<ExpensesPage />} />
             <Route
               path="/login"

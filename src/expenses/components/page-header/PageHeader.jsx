@@ -1,11 +1,11 @@
 import "./PageHeader.css";
 
-function PageHeader({ onAddExpense }) {
+function PageHeader({ title, subtitle, onAddExpense }) {
   return (
     <div className="page-header">
       <div>
-        <h1>Expenses</h1>
-        <p className="subtitle">Track and manage your spending</p>
+        <h1>{title}</h1>
+        <p className="subtitle">{subtitle}</p>
       </div>
       <button
         className="btn-add-expense"

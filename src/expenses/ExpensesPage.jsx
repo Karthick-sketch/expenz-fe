@@ -29,7 +29,11 @@ function ExpensesPage() {
       <Sidebar />
 
       <main className="main-content">
-        <PageHeader onAddExpense={() => setShowForm(true)} />
+        <PageHeader
+          title="Expenses"
+          subtitle="Track and manage your spending"
+          onAddExpense={() => setShowForm(true)}
+        />
         <MonthNavigator />
         <StatsRow
           balance={balance}
@@ -43,7 +47,6 @@ function ExpensesPage() {
           filter={filter}
           setFilter={setFilter}
           filteredExpenses={filteredExpenses}
-          onExpenseAdded={fetchExpenses}
           onOpenForm={() => setShowForm(true)}
         />
       </main>

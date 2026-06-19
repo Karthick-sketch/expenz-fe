@@ -5,17 +5,11 @@ function Sidebar() {
     <aside className="sidebar">
       <div className="sidebar-brand">💸 Expenz</div>
       <nav className="sidebar-nav">
-        <a href="/expenses" className="sidebar-link active">
+        <a href="/dashboard" className="sidebar-link active">
+          <span className="sidebar-icon">📊</span> Dashboard
+        </a>
+        <a href="/expenses" className="sidebar-link">
           <span className="sidebar-icon">📋</span> Expenses
-        </a>
-        <a href="#" className="sidebar-link">
-          <span className="sidebar-icon">💰</span> Incomes
-        </a>
-        <a href="#" className="sidebar-link">
-          <span className="sidebar-icon">📊</span> Reports
-        </a>
-        <a href="#" className="sidebar-link">
-          <span className="sidebar-icon">⚙️</span> Settings
         </a>
       </nav>
       <div className="sidebar-logout">

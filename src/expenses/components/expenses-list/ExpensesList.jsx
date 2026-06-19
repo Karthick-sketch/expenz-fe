@@ -29,8 +29,7 @@ function ExpensesList({ expenses, onOpenForm }) {
   }
 
   const sortedExpenses = [...expenses].sort(
-    (a, b) =>
-      new Date(b.date || b.dateAdded) - new Date(a.date || a.dateAdded),
+    (a, b) => new Date(b.date || b.dateAdded) - new Date(a.date || a.dateAdded),
   );
 
   return (
