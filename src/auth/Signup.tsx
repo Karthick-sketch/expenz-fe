@@ -1,24 +1,33 @@
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "./context/AuthContext";
+import { UserSignup } from "../models/user";
+import { type SubmitEvent, useState } from "react";
 
 export default function Signup() {
   const navigate = useNavigate();
   const { setAccessToken } = useAuth();
+  const [user, setUser] = useState<UserSignup>({
+    name: "",
+    email: "",
+    password: "",
+  });
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.target);
     try {
-      const res = await axios.post("api/auth/register", {
-        name: formData.get("fullName"),
-        email: formData.get("email"),
-        password: formData.get("password"),
-      });
+      const res = await axios.post("api/auth/register", user);
       setAccessToken(res.data.accessToken);
       navigate("/expenses");
-    } catch (error) {
-      console.error("Signup failed:", error?.response?.status ?? error.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          "Signup failed:",
+          error.response?.status ?? error.message,
+        );
+      } else {
+        console.error("Signup failed:", error);
+      }
     }
   };
 
@@ -42,6 +51,8 @@ export default function Signup() {
               placeholder="Jane Doe"
               autoComplete="name"
               required
+              value={user.name}
+              onChange={(e) => setUser({ ...user, name: e.target.value })}
             />
           </div>
 
@@ -55,6 +66,8 @@ export default function Signup() {
               placeholder="you@example.com"
               autoComplete="email"
               required
+              value={user.email}
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
             />
           </div>
 
@@ -69,6 +82,8 @@ export default function Signup() {
               autoComplete="new-password"
               minLength={8}
               required
+              value={user.password}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
             />
           </div>
 

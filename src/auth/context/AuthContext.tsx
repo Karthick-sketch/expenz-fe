@@ -1,11 +1,24 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import axios from "axios";
-import { setAccessToken as setTokenStore, clearAccessToken as clearTokenStore } from "../interceptor/tokenStore";
+import {
+  setAccessToken as setTokenStore,
+  clearAccessToken as clearTokenStore,
+} from "../interceptor/tokenStore";
 
-export const AuthContext = createContext();
+interface AuthContextValue {
+  accessToken: string | null;
+  setAccessToken: (token: string | null) => void;
+  isAuthenticated: boolean;
+}
 
-export function AuthProvider({ children }) {
-  const [accessToken, setAccessToken] = useState(null);
+export const AuthContext = createContext<AuthContextValue>({
+  accessToken: null,
+  setAccessToken: () => {},
+  isAuthenticated: false,
+});
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   // Sync token with tokenStore so the Axios interceptor has access to it

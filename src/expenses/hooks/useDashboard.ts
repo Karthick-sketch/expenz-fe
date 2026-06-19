@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import api from "../../auth/interceptor/api";
+import type { Expense } from "../../models/expense";
+import type { PieDataItem } from "../../models/pie-data-item";
 
 export default function useDashboard() {
   const [balance, setBalance] = useState(0);
@@ -7,7 +10,7 @@ export default function useDashboard() {
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpenseCount, setTotalExpenseCount] = useState(0);
   const [totalIncomeCount, setTotalIncomeCount] = useState(0);
-  const [recentExpenses, setRecentExpenses] = useState([]);
+  const [recentExpenses, setRecentExpenses] = useState<Expense[]>([]);
   const [showForm, setShowForm] = useState(false);
 
   const fetchDashboardData = async () => {
@@ -19,11 +22,15 @@ export default function useDashboard() {
       setTotalExpenseCount(response.data.totalExpenseCount);
       setTotalIncomeCount(response.data.totalIncomeCount);
       setRecentExpenses(response.data.recentExpenses);
-    } catch (err) {
-      console.error(
-        "Failed to fetch expenses:",
-        err?.response?.status ?? err.message,
-      );
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        console.error(
+          "Failed to fetch expenses:",
+          err.response?.status ?? err.message,
+        );
+      } else {
+        console.error("Failed to fetch expenses:", err);
+      }
     }
   };
 
@@ -31,8 +38,8 @@ export default function useDashboard() {
     fetchDashboardData();
   }, []);
 
-  const categoryMap = {};
-  const incomeCategoryMap = {};
+  const categoryMap: Record<string, number> = {};
+  const incomeCategoryMap: Record<string, number> = {};
 
   recentExpenses.forEach((e) => {
     const cat = e.category || "Other";
@@ -43,12 +50,14 @@ export default function useDashboard() {
     }
   });
 
-  const pieData = Object.entries(categoryMap).map(([name, value]) => ({
-    name: name.charAt(0).toUpperCase() + name.slice(1),
-    value,
-  }));
+  const pieData: PieDataItem[] = Object.entries(categoryMap).map(
+    ([name, value]) => ({
+      name: name.charAt(0).toUpperCase() + name.slice(1),
+      value,
+    }),
+  );
 
-  const incomePieData = Object.entries(incomeCategoryMap).map(
+  const incomePieData: PieDataItem[] = Object.entries(incomeCategoryMap).map(
     ([name, value]) => ({
       name: name.charAt(0).toUpperCase() + name.slice(1),
       value,

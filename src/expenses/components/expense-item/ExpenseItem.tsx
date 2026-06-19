@@ -1,14 +1,21 @@
 import { useState } from "react";
+import type { Expense } from "../../../models/expense";
 import "./ExpenseItem.css";
 
-function ExpenseItem({ expense, dotColor }) {
+interface ExpenseItemProps {
+  expense: Expense;
+  dotColor: string;
+}
+
+function ExpenseItem({ expense, dotColor }: ExpenseItemProps) {
   const [expanded, setExpanded] = useState(false);
 
-  const { id, title, amount, date, description, income, category } = expense;
+  const { id, title, amount, dateAdded, description, income, category } =
+    expense;
 
   const displayAmount = `${income ? "+" : "-"}₹${Number(amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-  const displayDate = date
-    ? new Date(date).toLocaleDateString("en-IN", {
+  const displayDate = dateAdded
+    ? new Date(dateAdded).toLocaleDateString("en-IN", {
         day: "2-digit",
         month: "short",
         year: "numeric",

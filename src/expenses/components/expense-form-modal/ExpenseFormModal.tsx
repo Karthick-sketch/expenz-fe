@@ -1,4 +1,10 @@
-import { useState } from "react";
+import {
+  type ChangeEvent,
+  type SubmitEvent,
+  type MouseEvent,
+  useState,
+} from "react";
+import axios from "axios";
 import api from "../../../auth/interceptor/api";
 import {
   EXPENSE_CATEGORIES,
@@ -16,15 +22,29 @@ const INITIAL = {
   dateAdded: new Date().toISOString().split("T")[0],
 };
 
-export default function ExpenseFormModal({ onClose, onSuccess }) {
+interface ExpenseFormModalProps {
+  onClose: () => void;
+  onSuccess: () => void;
+}
+
+export default function ExpenseFormModal({
+  onClose,
+  onSuccess,
+}: ExpenseFormModalProps) {
   const [expense, setExpense] = useState(INITIAL);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const set = (key) => (e) =>
-    setExpense((prev) => ({ ...prev, [key]: e.target.value }));
+  const set =
+    (key: string) =>
+    (
+      e: ChangeEvent<
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      >,
+    ) =>
+      setExpense((prev) => ({ ...prev, [key]: e.target.value }));
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
     setError(null);
@@ -34,19 +54,23 @@ export default function ExpenseFormModal({ onClose, onSuccess }) {
         amount: Number(expense.amount),
       });
       onSuccess?.();
-    } catch (err) {
+    } catch (err: unknown) {
       setError("Failed to save expense. Please try again.");
-      console.error(
-        "ExpenseForm submit error:",
-        err?.response?.status ?? err.message,
-      );
+      if (axios.isAxiosError(err)) {
+        console.error(
+          "ExpenseForm submit error:",
+          err.response?.status ?? err.message,
+        );
+      } else {
+        console.error("ExpenseForm submit error:", err);
+      }
     } finally {
       setLoading(false);
     }
   }
 
   /* Close on backdrop click */
-  function handleOverlayClick(e) {
+  function handleOverlayClick(e: MouseEvent<HTMLDivElement>) {
     if (e.target === e.currentTarget) onClose?.();
   }
 

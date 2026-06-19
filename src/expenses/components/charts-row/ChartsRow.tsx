@@ -1,7 +1,13 @@
+import type { PieDataItem } from "../../../models/pie-data-item";
 import ExpensePieChart from "../expense-pie-chart/ExpensePieChart";
 import "./ChartsRow.css";
 
-function ChartsRow({ pieData, incomePieData }) {
+interface ChartsRowProps {
+  pieData: PieDataItem[];
+  incomePieData: PieDataItem[];
+}
+
+function ChartsRow({ pieData, incomePieData }: ChartsRowProps) {
   return (
     <div className="charts-row">
       <div className="card chart-card">

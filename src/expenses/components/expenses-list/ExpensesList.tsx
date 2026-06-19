@@ -1,8 +1,14 @@
+import type { Expense } from "../../../models/expense";
 import ExpenseItem from "../expense-item/ExpenseItem";
 import { CATEGORY_COLORS } from "../../constants/categories";
 import "./ExpensesList.css";
 
-function ExpensesList({ expenses, onOpenForm }) {
+interface ExpensesListProps {
+  expenses: Expense[];
+  onOpenForm: () => void;
+}
+
+function ExpensesList({ expenses, onOpenForm }: ExpensesListProps) {
   if (expenses.length === 0) {
     return (
       <div className="empty-state">
@@ -29,7 +35,9 @@ function ExpensesList({ expenses, onOpenForm }) {
   }
 
   const sortedExpenses = [...expenses].sort(
-    (a, b) => new Date(b.date || b.dateAdded) - new Date(a.date || a.dateAdded),
+    (a, b) =>
+      new Date(b.dateAdded || "").getTime() -
+      new Date(a.dateAdded || "").getTime(),
   );
 
   return (
@@ -39,8 +47,9 @@ function ExpensesList({ expenses, onOpenForm }) {
           key={expense.id}
           expense={expense}
           dotColor={
-            CATEGORY_COLORS[expense.category?.toLowerCase()] ??
-            CATEGORY_COLORS.other
+            CATEGORY_COLORS[
+              expense.category?.toLowerCase() as keyof typeof CATEGORY_COLORS
+            ] ?? CATEGORY_COLORS.other
           }
         />
       ))}

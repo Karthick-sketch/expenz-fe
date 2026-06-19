@@ -1,23 +1,26 @@
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
+import { type SubmitEvent, useState } from "react";
+import type { UserLogin } from "../models/user";
 
 export default function Login() {
   const { setAccessToken } = useAuth();
+  const [user, setUser] = useState<UserLogin>({ email: "", password: "" });
   const navigate = useNavigate();
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-    const formData = new FormData(event.target);
     try {
-      const response = await axios.post("api/auth/login", {
-        email: formData.get("email"),
-        password: formData.get("password"),
-      });
+      const response = await axios.post("api/auth/login", user);
       setAccessToken(response.data.accessToken);
       navigate("/expenses");
-    } catch (error) {
-      console.error("Login failed:", error?.response?.status ?? error.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error("Login failed:", error.response?.status ?? error.message);
+      } else {
+        console.error("Login failed:", error);
+      }
     }
   }
 
@@ -41,6 +44,8 @@ export default function Login() {
               placeholder="you@example.com"
               autoComplete="email"
               required
+              value={user.email}
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
             />
           </div>
 
@@ -54,6 +59,8 @@ export default function Login() {
               placeholder="••••••••"
               autoComplete="current-password"
               required
+              value={user.password}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
             />
           </div>
 

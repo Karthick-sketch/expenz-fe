@@ -7,9 +7,15 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { CATEGORY_COLORS } from "../../constants/categories";
+import type { PieDataItem } from "../../../models/pie-data-item";
 import "./ExpensePieChart.css";
 
-const CustomTooltip = ({ active, payload }) => {
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: Array<{ name: string; value: number }>;
+}
+
+const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
       <div
@@ -36,7 +42,11 @@ const CustomTooltip = ({ active, payload }) => {
   return null;
 };
 
-export default function ExpensePieChart({ expenses }) {
+interface ExpensePieChartProps {
+  expenses: PieDataItem[];
+}
+
+export default function ExpensePieChart({ expenses }: ExpensePieChartProps) {
   if (!expenses || expenses.length === 0) {
     return (
       <div
@@ -66,8 +76,8 @@ export default function ExpensePieChart({ expenses }) {
           innerRadius={55}
           outerRadius={90}
           paddingAngle={3}
-          label={({ name, percent }) =>
-            `${name} ${(percent * 100).toFixed(0)}%`
+          label={({ name, percent }: { name?: string; percent?: number }) =>
+            `${name ?? ""} ${((percent ?? 0) * 100).toFixed(0)}%`
           }
           labelLine={true}
         >
@@ -75,8 +85,9 @@ export default function ExpensePieChart({ expenses }) {
             <Cell
               key={`cell-${entry.name}`}
               fill={
-                CATEGORY_COLORS[entry.name.toLowerCase()] ||
-                CATEGORY_COLORS.other
+                CATEGORY_COLORS[
+                  entry.name.toLowerCase() as keyof typeof CATEGORY_COLORS
+                ] || CATEGORY_COLORS.other
               }
               stroke="transparent"
             />

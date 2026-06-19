@@ -1,5 +1,14 @@
 import "./StatsRow.css";
 
+interface StatsRowProps {
+  balance?: number;
+  totalExpenses?: number;
+  totalIncome?: number;
+  expenseCount?: number;
+  incomeCount?: number;
+  recent?: boolean;
+}
+
 function StatsRow({
   balance = 0,
   totalExpenses = 0,
@@ -7,7 +16,7 @@ function StatsRow({
   expenseCount = 0,
   incomeCount = 0,
   recent = false,
-}) {
+}: StatsRowProps) {
   return (
     <div className="stats-row">
       <div className="stat-card">

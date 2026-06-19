@@ -1,5 +1,14 @@
+import type { Expense } from "../../../models/expense";
 import ExpensesList from "../expenses-list/ExpensesList";
 import "./TransactionsSection.css";
+
+interface TransactionsSectionProps {
+  filteredExpenses: Expense[];
+  onOpenForm: () => void;
+  filter?: string | null;
+  setFilter?: ((value: string) => void) | null;
+  recent?: boolean;
+}
 
 function TransactionsSection({
   filteredExpenses,
@@ -7,7 +16,7 @@ function TransactionsSection({
   filter = null,
   setFilter = null,
   recent = false,
-}) {
+}: TransactionsSectionProps) {
   return (
     <div className="transactions-section">
       <div className="card">

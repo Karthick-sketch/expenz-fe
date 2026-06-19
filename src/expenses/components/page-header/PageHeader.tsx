@@ -1,6 +1,12 @@
 import "./PageHeader.css";
 
-function PageHeader({ title, subtitle, onAddExpense }) {
+interface PageHeaderProps {
+  title: string;
+  subtitle: string;
+  onAddExpense: () => void;
+}
+
+function PageHeader({ title, subtitle, onAddExpense }: PageHeaderProps) {
   return (
     <div className="page-header">
       <div>
