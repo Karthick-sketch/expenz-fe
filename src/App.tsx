@@ -6,12 +6,12 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import ExpensesPage from "./expenses/ExpensesPage.jsx";
-import DashboardPage from "./expenses/dashboard-page/DashboardPage.jsx";
-import { useAuth } from "./auth/context/AuthContext.jsx";
-import Login from "./auth/Login.jsx";
-import Signup from "./auth/Signup.jsx";
-import PageNotFound from "./util/page-not-found/PageNotFound.jsx";
+import ExpensesPage from "./expenses/ExpensesPage";
+import DashboardPage from "./expenses/dashboard-page/DashboardPage";
+import { useAuth } from "./auth/context/AuthContext";
+import Login from "./auth/Login";
+import Signup from "./auth/Signup";
+import PageNotFound from "./util/page-not-found/PageNotFound";
 
 function App() {
   const { isAuthenticated } = useAuth();

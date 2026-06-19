@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
-import { setAccessToken as setTokenStore, clearAccessToken as clearTokenStore } from "../interceptor/tokenStore.js";
+import { setAccessToken as setTokenStore, clearAccessToken as clearTokenStore } from "../interceptor/tokenStore";
 
 export const AuthContext = createContext();
 
