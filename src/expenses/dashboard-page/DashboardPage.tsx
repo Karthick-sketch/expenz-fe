@@ -1,25 +1,16 @@
+import { useState } from "react";
 import ChartsRow from "../components/charts-row/ChartsRow";
 import ExpenseFormModal from "../components/expense-form-modal/ExpenseFormModal";
 import PageHeader from "../components/page-header/PageHeader";
 import Sidebar from "../components/sidebar/Sidebar";
 import StatsRow from "../components/stats-row/StatsRow";
 import TransactionsSection from "../components/transactions-section/TransactionsSection";
-import { useState } from "react";
 import useDashboard from "../hooks/useDashboard";
 
 export default function DashboardPage() {
   const [showForm, setShowForm] = useState(false);
-  const {
-    recentExpenses,
-    fetchDashboardData,
-    balance,
-    totalExpenses,
-    totalIncome,
-    totalExpenseCount,
-    totalIncomeCount,
-    pieData,
-    incomePieData,
-  } = useDashboard();
+  const { dashboardData, fetchDashboardData, pieData, incomePieData } =
+    useDashboard();
 
   return (
     <div className="app-shell">
@@ -32,16 +23,16 @@ export default function DashboardPage() {
           onAddExpense={() => setShowForm(true)}
         />
         <StatsRow
-          balance={balance}
-          totalExpenses={totalExpenses}
-          totalIncome={totalIncome}
-          expenseCount={totalExpenseCount}
-          incomeCount={totalIncomeCount}
+          balance={dashboardData.balance}
+          totalExpenses={dashboardData.totalExpenses}
+          totalIncome={dashboardData.totalIncome}
+          expenseCount={dashboardData.totalExpenseCount}
+          incomeCount={dashboardData.totalIncomeCount}
           recent={true}
         />
         <ChartsRow pieData={pieData} incomePieData={incomePieData} />
         <TransactionsSection
-          filteredExpenses={recentExpenses}
+          filteredExpenses={dashboardData.recentExpenses}
           onOpenForm={() => setShowForm(true)}
           recent={true}
         />

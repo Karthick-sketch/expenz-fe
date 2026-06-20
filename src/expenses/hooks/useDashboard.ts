@@ -1,27 +1,19 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import api from "../../auth/interceptor/api";
-import type { Expense } from "../../models/expense";
 import type { PieDataItem } from "../../models/pie-data-item";
+import { DashboardData } from "../../models/dashboard-data";
 
 export default function useDashboard() {
-  const [balance, setBalance] = useState(0);
-  const [totalExpenses, setTotalExpenses] = useState(0);
-  const [totalIncome, setTotalIncome] = useState(0);
-  const [totalExpenseCount, setTotalExpenseCount] = useState(0);
-  const [totalIncomeCount, setTotalIncomeCount] = useState(0);
-  const [recentExpenses, setRecentExpenses] = useState<Expense[]>([]);
+  const [dashboardData, setDashboardData] = useState<DashboardData>(
+    new DashboardData(),
+  );
   const [showForm, setShowForm] = useState(false);
 
   const fetchDashboardData = async () => {
     try {
       const response = await api.get("/expenses/dashboard");
-      setTotalExpenses(response.data.totalExpenses);
-      setTotalIncome(response.data.totalIncome);
-      setBalance(response.data.balance);
-      setTotalExpenseCount(response.data.totalExpenseCount);
-      setTotalIncomeCount(response.data.totalIncomeCount);
-      setRecentExpenses(response.data.recentExpenses);
+      setDashboardData(response.data);
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         console.error(
@@ -41,7 +33,7 @@ export default function useDashboard() {
   const categoryMap: Record<string, number> = {};
   const incomeCategoryMap: Record<string, number> = {};
 
-  recentExpenses.forEach((e) => {
+  dashboardData.recentExpenses.forEach((e) => {
     const cat = e.category || "Other";
     if (e.income) {
       incomeCategoryMap[cat] = (incomeCategoryMap[cat] || 0) + Number(e.amount);
@@ -65,15 +57,10 @@ export default function useDashboard() {
   );
 
   return {
-    recentExpenses,
+    dashboardData,
     showForm,
     setShowForm,
     fetchDashboardData,
-    balance,
-    totalExpenses,
-    totalIncome,
-    totalExpenseCount,
-    totalIncomeCount,
     pieData,
     incomePieData,
   };
