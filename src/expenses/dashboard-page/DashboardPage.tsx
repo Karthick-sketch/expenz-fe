@@ -1,12 +1,12 @@
 import { useState } from "react";
+import AppLayout from "../app-layout/AppLayout";
 import ChartsRow from "../components/charts-row/ChartsRow";
 import ExpenseFormModal from "../components/expense-form-modal/ExpenseFormModal";
 import PageHeader from "../components/page-header/PageHeader";
-import Sidebar from "../components/sidebar/Sidebar";
 import StatsRow from "../components/stats-row/StatsRow";
 import TransactionsSection from "../components/transactions-section/TransactionsSection";
 import useDashboard from "../hooks/useDashboard";
-import type { User } from "../../models/user";
+import { User } from "../../models/user";
 
 export default function DashboardPage(user: User) {
   const [showForm, setShowForm] = useState(false);
@@ -14,9 +14,7 @@ export default function DashboardPage(user: User) {
     useDashboard();
 
   return (
-    <div className="app-shell">
-      <Sidebar {...user} />
-
+    <AppLayout user={user}>
       <main className="main-content">
         <PageHeader
           title="Dashboard"
@@ -48,6 +46,6 @@ export default function DashboardPage(user: User) {
           }}
         />
       )}
-    </div>
+    </AppLayout>
   );
 }

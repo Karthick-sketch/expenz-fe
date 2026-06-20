@@ -6,8 +6,9 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import ExpensesPage from "./expenses/ExpensesPage";
 import DashboardPage from "./expenses/dashboard-page/DashboardPage";
+import ExpensesPage from "./expenses/ExpensesPage";
+import ExpensePage from "./expenses/expense-page/ExpensePage";
 import { useAuth } from "./auth/context/AuthContext";
 import Login from "./auth/Login";
 import Signup from "./auth/Signup";
@@ -24,6 +25,7 @@ function App() {
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<DashboardPage {...user} />} />
             <Route path="/expenses" element={<ExpensesPage {...user} />} />
+            <Route path="/expenses/:id" element={<ExpensePage {...user} />} />
             <Route
               path="/login"
               element={<Navigate to="/expenses" replace />}

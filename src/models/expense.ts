@@ -1,10 +1,10 @@
-export interface Expense {
-  id: number;
-  title: string;
-  income: boolean;
-  amount: number;
-  currencyCode: string;
-  category: string;
-  dateAdded: string;
+export class Expense {
+  id: number = 0;
+  title: string = "";
+  income: boolean = false;
+  amount: number = 0;
+  currencyCode: string = "";
+  category: string = "";
+  dateAdded: string = "";
   description?: string;
 }

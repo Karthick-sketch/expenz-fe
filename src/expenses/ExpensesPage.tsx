@@ -1,13 +1,13 @@
+import "./ExpensesPage.css";
 import useExpenses from "./hooks/useExpenses";
-import Sidebar from "./components/sidebar/Sidebar";
+import AppLayout from "./app-layout/AppLayout";
 import PageHeader from "./components/page-header/PageHeader";
 import MonthNavigator from "./components/month-navigator/MonthNavigator";
 import StatsRow from "./components/stats-row/StatsRow";
 import ChartsRow from "./components/charts-row/ChartsRow";
 import TransactionsSection from "./components/transactions-section/TransactionsSection";
 import ExpenseFormModal from "./components/expense-form-modal/ExpenseFormModal";
-import "./ExpensesPage.css";
-import type { User } from "../models/user";
+import { User } from "../models/user";
 
 function ExpensesPage(user: User) {
   const {
@@ -26,9 +26,7 @@ function ExpensesPage(user: User) {
   } = useExpenses();
 
   return (
-    <div className="app-shell">
-      <Sidebar {...user} />
-
+    <AppLayout user={user}>
       <main className="main-content">
         <PageHeader
           title="Expenses"
@@ -61,7 +59,7 @@ function ExpensesPage(user: User) {
           }}
         />
       )}
-    </div>
+    </AppLayout>
   );
 }
 

@@ -25,8 +25,8 @@ function Sidebar(user: User) {
           <span className="sidebar-icon">📋</span> Expenses
         </Link>
       </nav>
-      <div className="sidebar-logout">
-        <span className="sidebar-icon">🚪</span> {user.name}
+      <div className="sidebar-profile">
+        <span className="sidebar-icon">👤</span> {user.name}
       </div>
     </aside>
   );
