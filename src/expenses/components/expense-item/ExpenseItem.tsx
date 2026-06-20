@@ -1,6 +1,6 @@
-import { useState } from "react";
-import type { Expense } from "../../../models/expense";
 import "./ExpenseItem.css";
+import { useNavigate } from "react-router-dom";
+import type { Expense } from "../../../models/expense";
 
 interface ExpenseItemProps {
   expense: Expense;
@@ -8,10 +8,9 @@ interface ExpenseItemProps {
 }
 
 function ExpenseItem({ expense, dotColor }: ExpenseItemProps) {
-  const [expanded, setExpanded] = useState(false);
+  const navigate = useNavigate();
 
-  const { id, title, amount, dateAdded, description, income, category } =
-    expense;
+  const { id, title, amount, dateAdded, income, category } = expense;
 
   const displayAmount = `${income ? "+" : "-"}₹${Number(amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   const displayDate = dateAdded
@@ -27,7 +26,7 @@ function ExpenseItem({ expense, dotColor }: ExpenseItemProps) {
       <div
         className="expense-row"
         id={`expense-row-${id}`}
-        onClick={() => setExpanded((prev) => !prev)}
+        onClick={() => navigate(`/expenses/${id}`)}
       >
         {/* Category colour dot */}
         <span
@@ -67,13 +66,6 @@ function ExpenseItem({ expense, dotColor }: ExpenseItemProps) {
           </button>
         </div>
       </div>
-
-      {/* Expandable description */}
-      {description && (
-        <div className={`expense-description-panel ${expanded ? "open" : ""}`}>
-          <div className="expense-description-inner">{description}</div>
-        </div>
-      )}
     </li>
   );
 }
