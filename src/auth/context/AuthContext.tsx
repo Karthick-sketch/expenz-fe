@@ -1,24 +1,34 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
 import axios from "axios";
 import {
   setAccessToken as setTokenStore,
   clearAccessToken as clearTokenStore,
 } from "../interceptor/tokenStore";
+import { User } from "../../models/user";
 
 interface AuthContextValue {
   accessToken: string | null;
   setAccessToken: (token: string | null) => void;
   isAuthenticated: boolean;
+  user: User;
 }
 
 export const AuthContext = createContext<AuthContextValue>({
   accessToken: null,
   setAccessToken: () => {},
   isAuthenticated: false,
+  user: new User(),
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [user, setUser] = useState<User>(new User());
   const [isLoading, setIsLoading] = useState(true);
 
   // Sync token with tokenStore so the Axios interceptor has access to it
@@ -39,6 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .then((res) => {
         if (res.data?.accessToken) {
           setAccessToken(res.data.accessToken);
+          setUser(res.data.user);
         }
       })
       .catch(() => {
@@ -61,6 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         accessToken,
         setAccessToken,
         isAuthenticated: !!accessToken,
+        user,
       }}
     >
       {children}

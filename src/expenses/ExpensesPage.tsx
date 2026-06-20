@@ -7,8 +7,9 @@ import ChartsRow from "./components/charts-row/ChartsRow";
 import TransactionsSection from "./components/transactions-section/TransactionsSection";
 import ExpenseFormModal from "./components/expense-form-modal/ExpenseFormModal";
 import "./ExpensesPage.css";
+import type { User } from "../models/user";
 
-function ExpensesPage() {
+function ExpensesPage(user: User) {
   const {
     expenses,
     showForm,
@@ -26,7 +27,7 @@ function ExpensesPage() {
 
   return (
     <div className="app-shell">
-      <Sidebar />
+      <Sidebar {...user} />
 
       <main className="main-content">
         <PageHeader

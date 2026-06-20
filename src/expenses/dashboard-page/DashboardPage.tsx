@@ -6,15 +6,16 @@ import Sidebar from "../components/sidebar/Sidebar";
 import StatsRow from "../components/stats-row/StatsRow";
 import TransactionsSection from "../components/transactions-section/TransactionsSection";
 import useDashboard from "../hooks/useDashboard";
+import type { User } from "../../models/user";
 
-export default function DashboardPage() {
+export default function DashboardPage(user: User) {
   const [showForm, setShowForm] = useState(false);
   const { dashboardData, fetchDashboardData, pieData, incomePieData } =
     useDashboard();
 
   return (
     <div className="app-shell">
-      <Sidebar />
+      <Sidebar {...user} />
 
       <main className="main-content">
         <PageHeader

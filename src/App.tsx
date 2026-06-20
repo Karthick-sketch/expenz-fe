@@ -14,7 +14,7 @@ import Signup from "./auth/Signup";
 import PageNotFound from "./util/page-not-found/PageNotFound";
 
 function App() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   return (
     <Router>
@@ -22,8 +22,8 @@ function App() {
         {isAuthenticated ? (
           <>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/expenses" element={<ExpensesPage />} />
+            <Route path="/dashboard" element={<DashboardPage {...user} />} />
+            <Route path="/expenses" element={<ExpensesPage {...user} />} />
             <Route
               path="/login"
               element={<Navigate to="/expenses" replace />}
