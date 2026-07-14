@@ -11,11 +11,12 @@ import {
   INCOME_CATEGORIES,
 } from "../../constants/categories";
 import "./ExpenseFormModal.css";
+import { Expense, ExpenseNew } from "../../../models/expense";
 
-const INITIAL = {
+const INITIAL: ExpenseNew = {
   title: "",
   income: false,
-  amount: "",
+  amount: 0,
   currencyCode: "INR",
   category: "food",
   description: "",
@@ -25,13 +26,18 @@ const INITIAL = {
 interface ExpenseFormModalProps {
   onClose: () => void;
   onSuccess: () => void;
+  expenseUpdate?: Expense;
 }
 
 export default function ExpenseFormModal({
   onClose,
   onSuccess,
+  expenseUpdate,
 }: ExpenseFormModalProps) {
-  const [expense, setExpense] = useState(INITIAL);
+  const isEdit = expenseUpdate !== undefined;
+  const [expense, setExpense] = useState<ExpenseNew>(
+    isEdit ? { ...expenseUpdate } : INITIAL,
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -49,10 +55,17 @@ export default function ExpenseFormModal({
     setLoading(true);
     setError(null);
     try {
-      await api.post("/expenses", {
-        ...expense,
-        amount: Number(expense.amount),
-      });
+      if (isEdit && expenseUpdate?.id) {
+        await api.patch(`/expenses/${expenseUpdate.id}`, {
+          ...expense,
+          amount: Number(expense.amount),
+        });
+      } else {
+        await api.post("/expenses", {
+          ...expense,
+          amount: Number(expense.amount),
+        });
+      }
       onSuccess?.();
     } catch (err: unknown) {
       setError("Failed to save expense. Please try again.");
@@ -85,7 +98,9 @@ export default function ExpenseFormModal({
         {/* Header */}
         <div className="modal-header">
           <span className="modal-title" id="modal-title">
-            {expense.income ? "➕ Add Income" : "➕ Add Expense"}
+            {isEdit
+              ? `✏️ Edit ${expense.income ? "Income" : "Expense"}`
+              : `➕ Add ${expense.income ? "Income" : "Expense"}`}
           </span>
           <button
             className="modal-close"
@@ -269,9 +284,13 @@ export default function ExpenseFormModal({
               >
                 {loading
                   ? "Saving…"
-                  : expense.income
-                    ? "Add Income"
-                    : "Add Expense"}
+                  : isEdit
+                    ? expense.income
+                      ? "Update Income"
+                      : "Update Expense"
+                    : expense.income
+                      ? "Add Income"
+                      : "Add Expense"}
               </button>
             </div>
           </form>

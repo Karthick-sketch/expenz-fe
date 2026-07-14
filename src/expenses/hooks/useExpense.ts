@@ -6,6 +6,7 @@ import { Expense } from "../../models/expense";
 export default function useExpense(id: string) {
   const [expense, setExpense] = useState<Expense>(new Expense());
   const [showForm, setShowForm] = useState(false);
+  const [editForm, setEditForm] = useState(false);
 
   const fetchExpense = async () => {
     try {
@@ -31,6 +32,8 @@ export default function useExpense(id: string) {
     expense,
     showForm,
     setShowForm,
+    editForm,
+    setEditForm,
     fetchExpense,
   };
 }
