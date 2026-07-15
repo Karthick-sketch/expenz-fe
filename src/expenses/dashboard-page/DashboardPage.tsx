@@ -10,8 +10,14 @@ import { User } from "../../models/user";
 
 export default function DashboardPage(user: User) {
   const [showForm, setShowForm] = useState(false);
-  const { dashboardData, fetchDashboardData, pieData, incomePieData } =
-    useDashboard();
+  const {
+    dashboardData,
+    fetchDashboardData,
+    fetchExpenseGroups,
+    pieData,
+    incomePieData,
+    expenseGroups,
+  } = useDashboard();
 
   return (
     <AppLayout user={user}>
@@ -34,6 +40,7 @@ export default function DashboardPage(user: User) {
           filteredExpenses={dashboardData.recentExpenses}
           onOpenForm={() => setShowForm(true)}
           recent={true}
+          expenseGroups={expenseGroups}
         />
       </main>
 
@@ -43,6 +50,7 @@ export default function DashboardPage(user: User) {
           onSuccess={() => {
             setShowForm(false);
             fetchDashboardData();
+            fetchExpenseGroups();
           }}
         />
       )}

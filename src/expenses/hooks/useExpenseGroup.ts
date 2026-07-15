@@ -2,20 +2,18 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import api from "../../auth/interceptor/api";
 import type { PieDataItem } from "../../models/pie-data-item";
-import { DashboardData } from "../../models/dashboard-data";
-import useExpenseGroups from "./useExpenseGroups";
+import { ExpenseGroup } from "../../models/expense-group";
 
-export default function useDashboard() {
-  const [dashboardData, setDashboardData] = useState<DashboardData>(
-    new DashboardData(),
+export default function useExpenseGroup(id: string) {
+  const [expenseGroup, setExpenseGroup] = useState<ExpenseGroup>(
+    new ExpenseGroup(),
   );
   const [showForm, setShowForm] = useState(false);
-  const { expenseGroups, fetchExpenseGroups } = useExpenseGroups();
 
-  const fetchDashboardData = async () => {
+  const fetchExpenseGroup = async () => {
     try {
-      const response = await api.get("/expenses/dashboard");
-      setDashboardData(response.data);
+      const response = await api.get("/expenses/groups/" + id);
+      setExpenseGroup(response.data);
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         console.error(
@@ -29,13 +27,13 @@ export default function useDashboard() {
   };
 
   useEffect(() => {
-    fetchDashboardData();
+    fetchExpenseGroup();
   }, []);
 
   const categoryMap: Record<string, number> = {};
   const incomeCategoryMap: Record<string, number> = {};
 
-  dashboardData.recentExpenses.forEach((e) => {
+  expenseGroup.expenses.forEach((e) => {
     const cat = e.category || "Other";
     if (e.income) {
       incomeCategoryMap[cat] = (incomeCategoryMap[cat] || 0) + Number(e.amount);
@@ -59,13 +57,11 @@ export default function useDashboard() {
   );
 
   return {
-    dashboardData,
+    expenseGroup,
     showForm,
     setShowForm,
-    fetchDashboardData,
-    fetchExpenseGroups,
+    fetchExpenseGroup,
     pieData,
     incomePieData,
-    expenseGroups,
   };
 }

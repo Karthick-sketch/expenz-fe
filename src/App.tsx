@@ -13,6 +13,7 @@ import { useAuth } from "./auth/context/AuthContext";
 import Login from "./auth/Login";
 import Signup from "./auth/Signup";
 import PageNotFound from "./util/page-not-found/PageNotFound";
+import ExpenseGroupPage from "./expenses/expense-group-page/ExpenseGroupPage";
 
 function App() {
   const { isAuthenticated, user } = useAuth();
@@ -26,6 +27,10 @@ function App() {
             <Route path="/dashboard" element={<DashboardPage {...user} />} />
             <Route path="/expenses" element={<ExpensesPage {...user} />} />
             <Route path="/expenses/:id" element={<ExpensePage {...user} />} />
+            <Route
+              path="/expenses/groups/:id"
+              element={<ExpenseGroupPage {...user} />}
+            />
             <Route
               path="/login"
               element={<Navigate to="/expenses" replace />}

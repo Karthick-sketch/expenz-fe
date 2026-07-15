@@ -3,11 +3,13 @@ import axios from "axios";
 import api from "../../auth/interceptor/api";
 import type { Expense } from "../../models/expense";
 import type { PieDataItem } from "../../models/pie-data-item";
+import useExpenseGroups from "./useExpenseGroups";
 
 export default function useExpenses() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [filter, setFilter] = useState("All");
+  const { expenseGroups, fetchExpenseGroups } = useExpenseGroups();
 
   const fetchExpenses = async () => {
     try {
@@ -79,11 +81,13 @@ export default function useExpenses() {
     filter,
     setFilter,
     fetchExpenses,
+    fetchExpenseGroups,
     totalExpenses,
     totalIncome,
     balance,
     pieData,
     incomePieData,
     filteredExpenses,
+    expenseGroups,
   };
 }

@@ -3,6 +3,7 @@ import {
   type SubmitEvent,
   type MouseEvent,
   useState,
+  useEffect,
 } from "react";
 import axios from "axios";
 import api from "../../../auth/interceptor/api";
@@ -11,9 +12,10 @@ import {
   INCOME_CATEGORIES,
 } from "../../constants/categories";
 import "./ExpenseFormModal.css";
-import { Expense, ExpenseNew } from "../../../models/expense";
+import { Expense, ExpenseCreate } from "../../../models/expense";
+import type { ExpenseGroupList } from "../../../models/expense-group";
 
-const INITIAL: ExpenseNew = {
+const INITIAL: ExpenseCreate = {
   title: "",
   income: false,
   amount: 0,
@@ -35,11 +37,22 @@ export default function ExpenseFormModal({
   expenseUpdate,
 }: ExpenseFormModalProps) {
   const isEdit = expenseUpdate !== undefined;
-  const [expense, setExpense] = useState<ExpenseNew>(
+  const [expense, setExpense] = useState<ExpenseCreate>(
     isEdit ? { ...expenseUpdate } : INITIAL,
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [expenseGroups, setExpenseGroups] = useState<ExpenseGroupList[]>([]);
+
+  /* Fetch available expense groups */
+  useEffect(() => {
+    api
+      .get<ExpenseGroupList[]>("/expenses/groups")
+      .then((res) => setExpenseGroups(res.data))
+      .catch(() => {
+        /* silently ignore — the field becomes invisible */
+      });
+  }, []);
 
   const set =
     (key: string) =>
@@ -55,16 +68,17 @@ export default function ExpenseFormModal({
     setLoading(true);
     setError(null);
     try {
+      const payload = {
+        ...expense,
+        amount: Number(expense.amount),
+        expenseGroupId: expense.expenseGroupId
+          ? Number(expense.expenseGroupId)
+          : null,
+      };
       if (isEdit && expenseUpdate?.id) {
-        await api.patch(`/expenses/${expenseUpdate.id}`, {
-          ...expense,
-          amount: Number(expense.amount),
-        });
+        await api.patch(`/expenses/${expenseUpdate.id}`, payload);
       } else {
-        await api.post("/expenses", {
-          ...expense,
-          amount: Number(expense.amount),
-        });
+        await api.post("/expenses", payload);
       }
       onSuccess?.();
     } catch (err: unknown) {
@@ -255,6 +269,36 @@ export default function ExpenseFormModal({
                   required
                 />
               </div>
+
+              {/* Expense Group (optional) */}
+              {expenseGroups.length > 0 && (
+                <div className="form-field span-2">
+                  <label className="form-label" htmlFor="exp-group">
+                    📂 Expense Group
+                    <span className="form-label-optional"> (optional)</span>
+                  </label>
+                  <select
+                    id="exp-group"
+                    className="form-select"
+                    value={expense.expenseGroupId ?? ""}
+                    onChange={(e) =>
+                      setExpense((prev) => ({
+                        ...prev,
+                        expenseGroupId: e.target.value
+                          ? Number(e.target.value)
+                          : undefined,
+                      }))
+                    }
+                  >
+                    <option value="">— No group —</option>
+                    {expenseGroups.map((g) => (
+                      <option key={g.id} value={g.id}>
+                        {g.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               {/* Description */}
               <div className="form-field span-2">

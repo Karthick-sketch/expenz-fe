@@ -7,9 +7,10 @@ class Expense {
   category: string = "";
   dateAdded: string = "";
   description?: string;
+  expenseGroupId?: number;
 }
 
-class ExpenseNew {
+class ExpenseCreate {
   title: string = "";
   income: boolean = false;
   amount: number = 0;
@@ -17,6 +18,7 @@ class ExpenseNew {
   category: string = "";
   dateAdded: string = "";
   description?: string;
+  expenseGroupId?: number;
 }
 
-export { Expense, ExpenseNew };
+export { Expense, ExpenseCreate };

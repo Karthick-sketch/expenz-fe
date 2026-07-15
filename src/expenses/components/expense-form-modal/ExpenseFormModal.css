@@ -108,6 +108,15 @@
   letter-spacing: 0.05em;
 }
 
+.form-label-optional {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--text-3);
+  text-transform: none;
+  letter-spacing: 0;
+  margin-left: 0.25rem;
+}
+
 .form-input,
 .form-select,
 .form-textarea {

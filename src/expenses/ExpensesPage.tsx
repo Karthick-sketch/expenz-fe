@@ -17,12 +17,14 @@ function ExpensesPage(user: User) {
     filter,
     setFilter,
     fetchExpenses,
+    fetchExpenseGroups,
     totalExpenses,
     totalIncome,
     balance,
     pieData,
     incomePieData,
     filteredExpenses,
+    expenseGroups,
   } = useExpenses();
 
   return (
@@ -47,6 +49,7 @@ function ExpensesPage(user: User) {
           setFilter={setFilter}
           filteredExpenses={filteredExpenses}
           onOpenForm={() => setShowForm(true)}
+          expenseGroups={expenseGroups}
         />
       </main>
 
@@ -56,6 +59,7 @@ function ExpensesPage(user: User) {
           onSuccess={() => {
             setShowForm(false);
             fetchExpenses();
+            fetchExpenseGroups();
           }}
         />
       )}

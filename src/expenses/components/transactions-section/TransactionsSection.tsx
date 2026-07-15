@@ -1,5 +1,7 @@
 import type { Expense } from "../../../models/expense";
+import type { ExpenseGroupList } from "../../../models/expense-group";
 import ExpensesList from "../expenses-list/ExpensesList";
+import ExpenseGroupItem from "../expense-group-item/ExpenseGroupItem";
 import "./TransactionsSection.css";
 
 interface TransactionsSectionProps {
@@ -8,6 +10,7 @@ interface TransactionsSectionProps {
   filter?: string | null;
   setFilter?: ((value: string) => void) | null;
   recent?: boolean;
+  expenseGroups?: ExpenseGroupList[];
 }
 
 function TransactionsSection({
@@ -16,6 +19,7 @@ function TransactionsSection({
   filter = null,
   setFilter = null,
   recent = false,
+  expenseGroups = [],
 }: TransactionsSectionProps) {
   return (
     <div className="transactions-section">
@@ -43,6 +47,28 @@ function TransactionsSection({
           )}
         </div>
         <div className="card-body">
+          {/* Expense Groups section */}
+          {expenseGroups.length > 0 && (
+            <div className="transactions-group-section">
+              <div className="transactions-section-label">
+                <span className="section-label-icon">📂</span>
+                Expense Groups
+              </div>
+              <ul className="expenses-list">
+                {expenseGroups.map((group) => (
+                  <ExpenseGroupItem key={group.id} group={group} />
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Individual expenses section */}
+          {expenseGroups.length > 0 && filteredExpenses.length > 0 && (
+            <div className="transactions-section-label" style={{ marginTop: "1.25rem" }}>
+              <span className="section-label-icon">💳</span>
+              Individual Transactions
+            </div>
+          )}
           <ExpensesList expenses={filteredExpenses} onOpenForm={onOpenForm} />
         </div>
       </div>
