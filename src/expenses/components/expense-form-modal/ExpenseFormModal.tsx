@@ -29,16 +29,20 @@ interface ExpenseFormModalProps {
   onClose: () => void;
   onSuccess: () => void;
   expenseUpdate?: Expense;
+  defaultExpenseGroupId?: number;
 }
 
 export default function ExpenseFormModal({
   onClose,
   onSuccess,
   expenseUpdate,
+  defaultExpenseGroupId,
 }: ExpenseFormModalProps) {
   const isEdit = expenseUpdate !== undefined;
   const [expense, setExpense] = useState<ExpenseCreate>(
-    isEdit ? { ...expenseUpdate } : INITIAL,
+    isEdit
+      ? { ...expenseUpdate }
+      : { ...INITIAL, expenseGroupId: defaultExpenseGroupId },
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

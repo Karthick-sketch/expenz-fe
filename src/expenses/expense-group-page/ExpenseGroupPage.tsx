@@ -87,6 +87,7 @@ export default function ExpenseGroupPage(user: User) {
             setShowForm(false);
             fetchExpenseGroup();
           }}
+          defaultExpenseGroupId={expenseGroup.id}
         />
       )}
     </AppLayout>

@@ -7,9 +7,12 @@ import StatsRow from "./components/stats-row/StatsRow";
 import ChartsRow from "./components/charts-row/ChartsRow";
 import TransactionsSection from "./components/transactions-section/TransactionsSection";
 import ExpenseFormModal from "./components/expense-form-modal/ExpenseFormModal";
+import ExpenseGroupFormModal from "./components/expense-group-form-modal/ExpenseGroupFormModal";
 import { User } from "../models/user";
+import { useState } from "react";
 
 function ExpensesPage(user: User) {
+  const [showGroupForm, setShowGroupForm] = useState(false);
   const {
     expenses,
     showForm,
@@ -50,6 +53,7 @@ function ExpensesPage(user: User) {
           filteredExpenses={filteredExpenses}
           onOpenForm={() => setShowForm(true)}
           expenseGroups={expenseGroups}
+          onCreateGroup={() => setShowGroupForm(true)}
         />
       </main>
 
@@ -59,6 +63,16 @@ function ExpensesPage(user: User) {
           onSuccess={() => {
             setShowForm(false);
             fetchExpenses();
+            fetchExpenseGroups();
+          }}
+        />
+      )}
+
+      {showGroupForm && (
+        <ExpenseGroupFormModal
+          onClose={() => setShowGroupForm(false)}
+          onSuccess={() => {
+            setShowGroupForm(false);
             fetchExpenseGroups();
           }}
         />

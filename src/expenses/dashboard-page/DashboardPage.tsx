@@ -2,6 +2,7 @@ import { useState } from "react";
 import AppLayout from "../app-layout/AppLayout";
 import ChartsRow from "../components/charts-row/ChartsRow";
 import ExpenseFormModal from "../components/expense-form-modal/ExpenseFormModal";
+import ExpenseGroupFormModal from "../components/expense-group-form-modal/ExpenseGroupFormModal";
 import PageHeader from "../components/page-header/PageHeader";
 import StatsRow from "../components/stats-row/StatsRow";
 import TransactionsSection from "../components/transactions-section/TransactionsSection";
@@ -10,6 +11,7 @@ import { User } from "../../models/user";
 
 export default function DashboardPage(user: User) {
   const [showForm, setShowForm] = useState(false);
+  const [showGroupForm, setShowGroupForm] = useState(false);
   const {
     dashboardData,
     fetchDashboardData,
@@ -41,6 +43,7 @@ export default function DashboardPage(user: User) {
           onOpenForm={() => setShowForm(true)}
           recent={true}
           expenseGroups={expenseGroups}
+          onCreateGroup={() => setShowGroupForm(true)}
         />
       </main>
 
@@ -50,6 +53,16 @@ export default function DashboardPage(user: User) {
           onSuccess={() => {
             setShowForm(false);
             fetchDashboardData();
+            fetchExpenseGroups();
+          }}
+        />
+      )}
+
+      {showGroupForm && (
+        <ExpenseGroupFormModal
+          onClose={() => setShowGroupForm(false)}
+          onSuccess={() => {
+            setShowGroupForm(false);
             fetchExpenseGroups();
           }}
         />

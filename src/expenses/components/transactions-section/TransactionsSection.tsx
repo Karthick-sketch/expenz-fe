@@ -11,6 +11,7 @@ interface TransactionsSectionProps {
   setFilter?: ((value: string) => void) | null;
   recent?: boolean;
   expenseGroups?: ExpenseGroupList[];
+  onCreateGroup?: () => void;
 }
 
 function TransactionsSection({
@@ -20,10 +21,51 @@ function TransactionsSection({
   setFilter = null,
   recent = false,
   expenseGroups = [],
+  onCreateGroup,
 }: TransactionsSectionProps) {
   return (
     <div className="transactions-section">
-      <div className="card">
+      {/* ── Expense Groups card ── */}
+      {expenseGroups.length > 0 || onCreateGroup ? (
+        <div className="card transactions-card">
+          <div className="card-header">
+            <span className="card-title">
+              📂 Expense Groups
+            </span>
+            {onCreateGroup && (
+              <button
+                className="btn-create-group"
+                id="btn-create-expense-group"
+                onClick={onCreateGroup}
+              >
+                ＋ New Group
+              </button>
+            )}
+          </div>
+          <div className="card-body">
+            {expenseGroups.length > 0 ? (
+              <ul className="expenses-list">
+                {expenseGroups.map((group) => (
+                  <ExpenseGroupItem key={group.id} group={group} />
+                ))}
+              </ul>
+            ) : (
+              <div className="empty-groups">
+                <span className="empty-groups-icon">📂</span>
+                <p className="empty-groups-text">
+                  No expense groups yet.{" "}
+                  <button className="empty-groups-link" onClick={onCreateGroup}>
+                    Create your first group →
+                  </button>
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : null}
+
+      {/* ── Individual Transactions card ── */}
+      <div className="card transactions-card">
         <div className="card-header">
           <span className="card-title">
             {recent && "Recent "}
@@ -47,28 +89,6 @@ function TransactionsSection({
           )}
         </div>
         <div className="card-body">
-          {/* Expense Groups section */}
-          {expenseGroups.length > 0 && (
-            <div className="transactions-group-section">
-              <div className="transactions-section-label">
-                <span className="section-label-icon">📂</span>
-                Expense Groups
-              </div>
-              <ul className="expenses-list">
-                {expenseGroups.map((group) => (
-                  <ExpenseGroupItem key={group.id} group={group} />
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Individual expenses section */}
-          {expenseGroups.length > 0 && filteredExpenses.length > 0 && (
-            <div className="transactions-section-label" style={{ marginTop: "1.25rem" }}>
-              <span className="section-label-icon">💳</span>
-              Individual Transactions
-            </div>
-          )}
           <ExpensesList expenses={filteredExpenses} onOpenForm={onOpenForm} />
         </div>
       </div>
