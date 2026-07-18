@@ -1,6 +1,7 @@
 import "./ExpenseItem.css";
 import { useNavigate } from "react-router-dom";
 import type { Expense } from "../../../models/expense";
+import useCurrency from "../../hooks/useCurrency";
 
 interface ExpenseItemProps {
   expense: Expense;
@@ -8,11 +9,12 @@ interface ExpenseItemProps {
 }
 
 function ExpenseItem({ expense, dotColor }: ExpenseItemProps) {
+  const currency = useCurrency();
   const navigate = useNavigate();
 
   const { id, title, amount, dateAdded, income, category } = expense;
 
-  const displayAmount = `${income ? "+" : "-"}₹${Number(amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const displayAmount = `${income ? "+" : "-"}${currency}${Number(amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   const displayDate = dateAdded
     ? new Date(dateAdded).toLocaleDateString("en-IN", {
         day: "2-digit",

@@ -9,6 +9,7 @@ import useExpenseGroup from "../hooks/useExpenseGroup";
 import { User } from "../../models/user";
 import { useParams } from "react-router-dom";
 import "./ExpenseGroupPage.css";
+import { CurrencyContext } from "../context/CurrencyContext";
 
 export default function ExpenseGroupPage(user: User) {
   const { id } = useParams();
@@ -24,72 +25,74 @@ export default function ExpenseGroupPage(user: User) {
 
   return (
     <AppLayout user={user}>
-      <main className="main-content">
-        {/* Breadcrumb */}
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-          <button
-            className="breadcrumb-link"
-            onClick={() => navigate("/expenses")}
-            aria-label="Back to Expenses"
-          >
-            Expenses
-          </button>
-          <span className="breadcrumb-separator">›</span>
-          <span className="breadcrumb-current">
-            {expenseGroup.title || "Expense Group"}
-          </span>
-        </nav>
+      <CurrencyContext.Provider value={user.currencyCode}>
+        <main className="main-content">
+          {/* Breadcrumb */}
+          <nav className="breadcrumb" aria-label="Breadcrumb">
+            <button
+              className="breadcrumb-link"
+              onClick={() => navigate("/expenses")}
+              aria-label="Back to Expenses"
+            >
+              Expenses
+            </button>
+            <span className="breadcrumb-separator">›</span>
+            <span className="breadcrumb-current">
+              {expenseGroup.title || "Expense Group"}
+            </span>
+          </nav>
 
-        {/* Page header */}
-        <div className="expense-group-page-header">
-          <div className="expense-group-page-title-wrap">
-            <span className="expense-group-page-icon">📂</span>
-            <div>
-              <h1 className="expense-group-page-title">
-                {expenseGroup.title || "Loading…"}
-              </h1>
-              {expenseGroup.description && (
-                <p className="expense-group-page-subtitle">
-                  {expenseGroup.description}
-                </p>
-              )}
+          {/* Page header */}
+          <div className="expense-group-page-header">
+            <div className="expense-group-page-title-wrap">
+              <span className="expense-group-page-icon">📂</span>
+              <div>
+                <h1 className="expense-group-page-title">
+                  {expenseGroup.title || "Loading…"}
+                </h1>
+                {expenseGroup.description && (
+                  <p className="expense-group-page-subtitle">
+                    {expenseGroup.description}
+                  </p>
+                )}
+              </div>
             </div>
+            <button
+              className="btn-add-expense"
+              id="btn-open-expense-form"
+              onClick={() => setShowForm(true)}
+            >
+              ＋ Add Expense
+            </button>
           </div>
-          <button
-            className="btn-add-expense"
-            id="btn-open-expense-form"
-            onClick={() => setShowForm(true)}
-          >
-            ＋ Add Expense
-          </button>
-        </div>
 
-        <StatsRow
-          balance={expenseGroup.balanceAmount}
-          totalExpenses={expenseGroup.totalExpensesAmount}
-          totalIncome={expenseGroup.totalIncomesAmount}
-          expenseCount={expenseGroup.totalExpensesCount}
-          incomeCount={expenseGroup.totalIncomesCount}
-          recent={true}
-        />
-        <ChartsRow pieData={pieData} incomePieData={incomePieData} />
-        <TransactionsSection
-          filteredExpenses={expenseGroup.expenses}
-          onOpenForm={() => setShowForm(true)}
-          recent={true}
-        />
-      </main>
+          <StatsRow
+            balance={expenseGroup.balanceAmount}
+            totalExpenses={expenseGroup.totalExpensesAmount}
+            totalIncome={expenseGroup.totalIncomesAmount}
+            expenseCount={expenseGroup.totalExpensesCount}
+            incomeCount={expenseGroup.totalIncomesCount}
+            recent={true}
+          />
+          <ChartsRow pieData={pieData} incomePieData={incomePieData} />
+          <TransactionsSection
+            filteredExpenses={expenseGroup.expenses}
+            onOpenForm={() => setShowForm(true)}
+            recent={true}
+          />
+        </main>
 
-      {showForm && (
-        <ExpenseFormModal
-          onClose={() => setShowForm(false)}
-          onSuccess={() => {
-            setShowForm(false);
-            fetchExpenseGroup();
-          }}
-          defaultExpenseGroupId={expenseGroup.id}
-        />
-      )}
+        {showForm && (
+          <ExpenseFormModal
+            onClose={() => setShowForm(false)}
+            onSuccess={() => {
+              setShowForm(false);
+              fetchExpenseGroup();
+            }}
+            defaultExpenseGroupId={expenseGroup.id}
+          />
+        )}
+      </CurrencyContext.Provider>
     </AppLayout>
   );
 }

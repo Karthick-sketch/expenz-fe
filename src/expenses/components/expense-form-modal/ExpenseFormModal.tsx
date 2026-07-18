@@ -19,7 +19,6 @@ const INITIAL: ExpenseCreate = {
   title: "",
   income: false,
   amount: 0,
-  currencyCode: "INR",
   category: "food",
   description: "",
   dateAdded: new Date().toISOString().split("T")[0],
@@ -217,24 +216,6 @@ export default function ExpenseFormModal({
                   onChange={set("amount")}
                   required
                 />
-              </div>
-
-              {/* Currency */}
-              <div className="form-field">
-                <label className="form-label" htmlFor="exp-currencyCode">
-                  Currency
-                </label>
-                <select
-                  id="exp-currencyCode"
-                  className="form-select"
-                  value={expense.currencyCode}
-                  onChange={set("currencyCode")}
-                >
-                  <option value="INR">INR ₹</option>
-                  <option value="USD">USD $</option>
-                  <option value="EUR">EUR €</option>
-                  <option value="GBP">GBP £</option>
-                </select>
               </div>
 
               {/* Category — expense or income variants */}

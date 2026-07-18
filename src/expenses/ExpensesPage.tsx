@@ -10,6 +10,7 @@ import ExpenseFormModal from "./components/expense-form-modal/ExpenseFormModal";
 import ExpenseGroupFormModal from "./components/expense-group-form-modal/ExpenseGroupFormModal";
 import { User } from "../models/user";
 import { useState } from "react";
+import { CurrencyContext } from "./context/CurrencyContext";
 
 function ExpensesPage(user: User) {
   const [showGroupForm, setShowGroupForm] = useState(false);
@@ -32,51 +33,53 @@ function ExpensesPage(user: User) {
 
   return (
     <AppLayout user={user}>
-      <main className="main-content">
-        <PageHeader
-          title="Expenses"
-          subtitle="Track and manage your spending"
-          onAddExpense={() => setShowForm(true)}
-        />
-        <MonthNavigator />
-        <StatsRow
-          balance={balance}
-          totalExpenses={totalExpenses}
-          totalIncome={totalIncome}
-          expenseCount={expenses.filter((e) => !e.income).length}
-          incomeCount={expenses.filter((e) => e.income).length}
-        />
-        <ChartsRow pieData={pieData} incomePieData={incomePieData} />
-        <TransactionsSection
-          filter={filter}
-          setFilter={setFilter}
-          filteredExpenses={filteredExpenses}
-          onOpenForm={() => setShowForm(true)}
-          expenseGroups={expenseGroups}
-          onCreateGroup={() => setShowGroupForm(true)}
-        />
-      </main>
+      <CurrencyContext.Provider value={user.currencyCode}>
+        <main className="main-content">
+          <PageHeader
+            title="Expenses"
+            subtitle="Track and manage your spending"
+            onAddExpense={() => setShowForm(true)}
+          />
+          <MonthNavigator />
+          <StatsRow
+            balance={balance}
+            totalExpenses={totalExpenses}
+            totalIncome={totalIncome}
+            expenseCount={expenses.filter((e) => !e.income).length}
+            incomeCount={expenses.filter((e) => e.income).length}
+          />
+          <ChartsRow pieData={pieData} incomePieData={incomePieData} />
+          <TransactionsSection
+            filter={filter}
+            setFilter={setFilter}
+            filteredExpenses={filteredExpenses}
+            onOpenForm={() => setShowForm(true)}
+            expenseGroups={expenseGroups}
+            onCreateGroup={() => setShowGroupForm(true)}
+          />
+        </main>
 
-      {showForm && (
-        <ExpenseFormModal
-          onClose={() => setShowForm(false)}
-          onSuccess={() => {
-            setShowForm(false);
-            fetchExpenses();
-            fetchExpenseGroups();
-          }}
-        />
-      )}
+        {showForm && (
+          <ExpenseFormModal
+            onClose={() => setShowForm(false)}
+            onSuccess={() => {
+              setShowForm(false);
+              fetchExpenses();
+              fetchExpenseGroups();
+            }}
+          />
+        )}
 
-      {showGroupForm && (
-        <ExpenseGroupFormModal
-          onClose={() => setShowGroupForm(false)}
-          onSuccess={() => {
-            setShowGroupForm(false);
-            fetchExpenseGroups();
-          }}
-        />
-      )}
+        {showGroupForm && (
+          <ExpenseGroupFormModal
+            onClose={() => setShowGroupForm(false)}
+            onSuccess={() => {
+              setShowGroupForm(false);
+              fetchExpenseGroups();
+            }}
+          />
+        )}
+      </CurrencyContext.Provider>
     </AppLayout>
   );
 }

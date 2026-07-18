@@ -4,6 +4,7 @@ import AppLayout from "../app-layout/AppLayout";
 import useExpense from "../hooks/useExpense";
 import ExpenseFormModal from "../components/expense-form-modal/ExpenseFormModal";
 import { User } from "../../models/user";
+import { getCurrencySymbol } from "../../util/currency/currency";
 
 /* ── Category helpers ───────────────────────────── */
 const CATEGORY_META: Record<string, { icon: string; color: string }> = {
@@ -60,17 +61,21 @@ function DetailSkeleton() {
 function ExpensePage(user: User) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const currency = getCurrencySymbol(user.currencyCode);
   const { expense, editForm, setEditForm, fetchExpense } = useExpense(id!);
 
   const isLoaded = expense.id !== 0;
   const meta = getCategoryMeta(expense.category);
 
-  const displayAmount = `${expense.income ? "+" : "-"}₹${Number(
+  const fmt = (n: number) =>
+    `${Math.abs(Number(n)).toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+
+  const displayAmount = `${expense.income ? "+" : "-"}${currency}${fmt(
     expense.amount,
-  ).toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
+  )}`;
 
   const displayDate = expense.dateAdded
     ? new Date(expense.dateAdded).toLocaleDateString("en-IN", {
@@ -201,17 +206,6 @@ function ExpensePage(user: User) {
                       }}
                     >
                       {displayAmount}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Currency */}
-                <div className="detail-field">
-                  <span className="detail-field-icon">🌐</span>
-                  <div className="detail-field-body">
-                    <div className="detail-field-label">Currency</div>
-                    <div className="detail-field-value">
-                      {expense.currencyCode || "—"}
                     </div>
                   </div>
                 </div>

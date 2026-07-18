@@ -3,7 +3,6 @@ class Expense {
   title: string = "";
   income: boolean = false;
   amount: number = 0;
-  currencyCode: string = "";
   category: string = "";
   dateAdded: string = "";
   description?: string;
@@ -14,7 +13,6 @@ class ExpenseCreate {
   title: string = "";
   income: boolean = false;
   amount: number = 0;
-  currencyCode: string = "";
   category: string = "";
   dateAdded: string = "";
   description?: string;

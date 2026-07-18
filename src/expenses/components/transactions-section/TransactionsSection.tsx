@@ -29,9 +29,7 @@ function TransactionsSection({
       {expenseGroups.length > 0 || onCreateGroup ? (
         <div className="card transactions-card">
           <div className="card-header">
-            <span className="card-title">
-              📂 Expense Groups
-            </span>
+            <span className="card-title">📂 Expense Groups</span>
             {onCreateGroup && (
               <button
                 className="btn-create-group"

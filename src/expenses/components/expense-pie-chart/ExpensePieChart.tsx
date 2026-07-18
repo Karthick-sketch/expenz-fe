@@ -9,13 +9,15 @@ import {
 import { CATEGORY_COLORS } from "../../constants/categories";
 import type { PieDataItem } from "../../../models/pie-data-item";
 import "./ExpensePieChart.css";
+import useCurrency from "../../hooks/useCurrency";
 
 interface CustomTooltipProps {
   active?: boolean;
   payload?: Array<{ name: string; value: number }>;
+  currency?: string;
 }
 
-const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
+const CustomTooltip = ({ active, payload, currency }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
       <div
@@ -30,7 +32,7 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
       >
         <strong>{payload[0].name}</strong>
         <div>
-          ₹
+          {currency}
           {Number(payload[0].value).toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
@@ -47,6 +49,8 @@ interface ExpensePieChartProps {
 }
 
 export default function ExpensePieChart({ expenses }: ExpensePieChartProps) {
+  const currency = useCurrency();
+
   if (!expenses || expenses.length === 0) {
     return (
       <div
@@ -93,7 +97,7 @@ export default function ExpensePieChart({ expenses }: ExpensePieChartProps) {
             />
           ))}
         </Pie>
-        <Tooltip content={<CustomTooltip />} />
+        <Tooltip content={<CustomTooltip currency={currency} />} />
         <Legend wrapperStyle={{ fontSize: "0.78rem", color: "#9ba3b7" }} />
       </PieChart>
     </ResponsiveContainer>
