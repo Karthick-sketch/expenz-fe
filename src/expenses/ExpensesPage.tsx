@@ -16,15 +16,15 @@ function ExpensesPage(user: User) {
   const [showGroupForm, setShowGroupForm] = useState(false);
   const {
     expenses,
+    totalExpensesAmount,
+    totalIncomesAmount,
+    balanceAmount,
     showForm,
     setShowForm,
     filter,
     setFilter,
     fetchExpenses,
     fetchExpenseGroups,
-    totalExpenses,
-    totalIncome,
-    balance,
     pieData,
     incomePieData,
     filteredExpenses,
@@ -42,9 +42,9 @@ function ExpensesPage(user: User) {
           />
           <MonthNavigator />
           <StatsRow
-            balance={balance}
-            totalExpenses={totalExpenses}
-            totalIncome={totalIncome}
+            balance={balanceAmount}
+            totalExpenses={totalExpensesAmount}
+            totalIncome={totalIncomesAmount}
             expenseCount={expenses.filter((e) => !e.income).length}
             incomeCount={expenses.filter((e) => e.income).length}
           />

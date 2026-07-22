@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import api from "../../auth/interceptor/api";
+import { expenseApi, execute } from "../api/expenseApi";
 import { Expense } from "../../models/expense";
 
 export default function useExpense(id: string) {
@@ -9,19 +8,8 @@ export default function useExpense(id: string) {
   const [editForm, setEditForm] = useState(false);
 
   const fetchExpense = async () => {
-    try {
-      const response = await api.get<Expense>("/expenses/" + id);
-      setExpense(response.data);
-    } catch (err: unknown) {
-      if (axios.isAxiosError(err)) {
-        console.error(
-          "Failed to fetch expenses:",
-          err.response?.status ?? err.message,
-        );
-      } else {
-        console.error("Failed to fetch expenses:", err);
-      }
-    }
+    const data = await execute(() => expenseApi.getExpenseById(id));
+    setExpense(data);
   };
 
   useEffect(() => {

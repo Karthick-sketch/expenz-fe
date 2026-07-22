@@ -1,4 +1,4 @@
-const currencyMap = {
+const currency = {
   USD: "$",
   EUR: "€",
   GBP: "£",
@@ -7,7 +7,7 @@ const currencyMap = {
 
 export function getCurrencySymbol(currencyCode: string): string {
   return (
-    currencyMap[currencyCode.toUpperCase() as keyof typeof currencyMap] ||
+    currency[currencyCode.toUpperCase() as keyof typeof currency] ||
     currencyCode
   );
 }

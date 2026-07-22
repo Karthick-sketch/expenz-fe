@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import api from "../../auth/interceptor/api";
+import { expenseApi, execute } from "../api/expenseApi";
 import type { PieDataItem } from "../../models/pie-data-item";
 import { DashboardData } from "../../models/dashboard-data";
 import useExpenseGroups from "./useExpenseGroups";
+import { calculateCategoryMap, mapPieDataItem } from "../util/expenseUtils";
 
 export default function useDashboard() {
   const [dashboardData, setDashboardData] = useState<DashboardData>(
@@ -13,50 +13,25 @@ export default function useDashboard() {
   const { expenseGroups, fetchExpenseGroups } = useExpenseGroups();
 
   const fetchDashboardData = async () => {
-    try {
-      const response = await api.get("/expenses/dashboard");
-      setDashboardData(response.data);
-    } catch (err: unknown) {
-      if (axios.isAxiosError(err)) {
-        console.error(
-          "Failed to fetch expenses:",
-          err.response?.status ?? err.message,
-        );
-      } else {
-        console.error("Failed to fetch expenses:", err);
-      }
-    }
+    const data = await execute(() => expenseApi.getDashboardData());
+    setDashboardData(data);
   };
 
   useEffect(() => {
     fetchDashboardData();
   }, []);
 
-  const categoryMap: Record<string, number> = {};
+  const expenseCategoryMap: Record<string, number> = {};
   const incomeCategoryMap: Record<string, number> = {};
 
-  dashboardData.recentExpenses.forEach((e) => {
-    const cat = e.category || "Other";
-    if (e.income) {
-      incomeCategoryMap[cat] = (incomeCategoryMap[cat] || 0) + Number(e.amount);
-    } else {
-      categoryMap[cat] = (categoryMap[cat] || 0) + Number(e.amount);
-    }
-  });
-
-  const pieData: PieDataItem[] = Object.entries(categoryMap).map(
-    ([name, value]) => ({
-      name: name.charAt(0).toUpperCase() + name.slice(1),
-      value,
-    }),
+  calculateCategoryMap(
+    dashboardData.recentExpenses,
+    expenseCategoryMap,
+    incomeCategoryMap,
   );
 
-  const incomePieData: PieDataItem[] = Object.entries(incomeCategoryMap).map(
-    ([name, value]) => ({
-      name: name.charAt(0).toUpperCase() + name.slice(1),
-      value,
-    }),
-  );
+  const pieData: PieDataItem[] = mapPieDataItem(expenseCategoryMap);
+  const incomePieData: PieDataItem[] = mapPieDataItem(incomeCategoryMap);
 
   return {
     dashboardData,

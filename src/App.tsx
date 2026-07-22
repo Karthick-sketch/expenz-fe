@@ -12,7 +12,7 @@ import ExpensePage from "./expenses/expense-page/ExpensePage";
 import { useAuth } from "./auth/context/AuthContext";
 import Login from "./auth/Login";
 import Signup from "./auth/Signup";
-import PageNotFound from "./util/page-not-found/PageNotFound";
+import PageNotFound from "./error-pages/page-not-found/PageNotFound";
 import ExpenseGroupPage from "./expenses/expense-group-page/ExpenseGroupPage";
 
 function App() {

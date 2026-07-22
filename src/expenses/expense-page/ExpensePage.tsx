@@ -4,7 +4,7 @@ import AppLayout from "../app-layout/AppLayout";
 import useExpense from "../hooks/useExpense";
 import ExpenseFormModal from "../components/expense-form-modal/ExpenseFormModal";
 import { User } from "../../models/user";
-import { getCurrencySymbol } from "../../util/currency/currency";
+import { getCurrencySymbol } from "../util/currencyUtils";
 
 /* ── Category helpers ───────────────────────────── */
 const CATEGORY_META: Record<string, { icon: string; color: string }> = {
