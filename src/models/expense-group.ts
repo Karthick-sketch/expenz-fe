@@ -1,31 +1,31 @@
-import { Expense } from "./expense";
+import type { Expense } from "./expense";
 
-class ExpenseGroup {
-  id: number = 0;
-  title: string = "";
-  description: string = "";
-  totalExpensesCount: number = 0;
-  totalIncomesCount: number = 0;
-  totalExpensesAmount: number = 0;
-  totalIncomesAmount: number = 0;
-  balanceAmount: number = 0;
-  expenses: Expense[] = [];
+interface ExpenseGroup {
+  id: number;
+  title: string;
+  description: string;
+  totalExpensesCount: number;
+  totalIncomesCount: number;
+  totalExpensesAmount: number;
+  totalIncomesAmount: number;
+  balanceAmount: number;
+  expenses: Expense[];
 }
 
-class ExpenseGroupList {
-  id: number = 0;
-  title: string = "";
-  description: string = "";
-  expenseCount: number = 0;
-  incomeCount: number = 0;
-  totalExpensesAmount: number = 0;
-  totalIncomesAmount: number = 0;
-  balanceAmount: number = 0;
+interface ExpenseGroupList {
+  id: number;
+  title: string;
+  description: string;
+  expenseCount: number;
+  incomeCount: number;
+  totalExpensesAmount: number;
+  totalIncomesAmount: number;
+  balanceAmount: number;
 }
 
-class ExpenseGroupCreate {
-  title: string = "";
-  description: string = "";
+interface ExpenseGroupCreate {
+  title: string;
+  description: string;
 }
 
-export { ExpenseGroup, ExpenseGroupList, ExpenseGroupCreate };
+export type { ExpenseGroup, ExpenseGroupList, ExpenseGroupCreate };

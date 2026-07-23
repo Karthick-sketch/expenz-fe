@@ -10,7 +10,7 @@ import {
   setAccessToken as setTokenStore,
   clearAccessToken as clearTokenStore,
 } from "../interceptor/tokenStore";
-import { User } from "../../models/user";
+import type { User } from "../../models/user";
 
 interface AuthContextValue {
   accessToken: string | null;
@@ -23,12 +23,12 @@ export const AuthContext = createContext<AuthContextValue>({
   accessToken: null,
   setAccessToken: () => {},
   isAuthenticated: false,
-  user: new User(),
+  user: {} as User,
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [user, setUser] = useState<User>(new User());
+  const [user, setUser] = useState<User>({} as User);
   const [isLoading, setIsLoading] = useState(true);
 
   // Sync token with tokenStore so the Axios interceptor has access to it

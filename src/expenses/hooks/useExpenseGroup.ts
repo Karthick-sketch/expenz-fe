@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { expenseApi, execute, throwError } from "../api/expenseApi";
 import type { PieDataItem } from "../../models/pie-data-item";
-import { ExpenseGroup } from "../../models/expense-group";
+import type { ExpenseGroup } from "../../models/expense-group";
 import { calculateCategoryMap, mapPieDataItem } from "../util/expenseUtils";
 
 export default function useExpenseGroup(id: string) {
   const [expenseGroup, setExpenseGroup] = useState<ExpenseGroup>(
-    new ExpenseGroup(),
+    {} as ExpenseGroup,
   );
   const [showForm, setShowForm] = useState(false);
 
@@ -22,6 +22,7 @@ export default function useExpenseGroup(id: string) {
 
   const categoryMap: Record<string, number> = {};
   const incomeCategoryMap: Record<string, number> = {};
+  expenseGroup.expenses = expenseGroup.expenses || [];
 
   calculateCategoryMap(expenseGroup.expenses, categoryMap, incomeCategoryMap);
 

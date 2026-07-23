@@ -6,7 +6,7 @@ export const calculateCategoryMap = (
   expenseCategoryMap: Record<string, number>,
   incomeCategoryMap: Record<string, number>,
 ) => {
-  expenses.forEach((e) => {
+  (expenses || []).forEach((e) => {
     const cat = e.category || "Other";
     if (e.income) {
       incomeCategoryMap[cat] = (incomeCategoryMap[cat] || 0) + Number(e.amount);

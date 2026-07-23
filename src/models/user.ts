@@ -1,17 +1,19 @@
-export class User {
-  id: number = 0;
-  name: string = "";
-  email: string = "";
-  currencyCode: string = "";
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  currencyCode: string;
 }
 
-export interface UserLogin {
+interface UserLogin {
   email: string;
   password: string;
 }
 
-export interface UserSignup {
+interface UserSignup {
   name: string;
   email: string;
   password: string;
 }
+
+export type { User, UserLogin, UserSignup };

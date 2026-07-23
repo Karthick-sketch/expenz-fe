@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { expenseApi, execute, throwError } from "../api/expenseApi";
 import type { PieDataItem } from "../../models/pie-data-item";
-import { DashboardData } from "../../models/dashboard-data";
+import type { DashboardData } from "../../models/dashboard-data";
 import useExpenseGroups from "./useExpenseGroups";
 import { calculateCategoryMap, mapPieDataItem } from "../util/expenseUtils";
 
 export default function useDashboard() {
   const [dashboardData, setDashboardData] = useState<DashboardData>(
-    new DashboardData(),
+    {} as DashboardData,
   );
   const [showForm, setShowForm] = useState(false);
   const { expenseGroups, fetchExpenseGroups } = useExpenseGroups();
@@ -24,6 +24,7 @@ export default function useDashboard() {
 
   const expenseCategoryMap: Record<string, number> = {};
   const incomeCategoryMap: Record<string, number> = {};
+  dashboardData.recentExpenses = dashboardData.recentExpenses || [];
 
   calculateCategoryMap(
     dashboardData.recentExpenses,

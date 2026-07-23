@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { expenseApi, execute, throwError } from "../api/expenseApi";
-import { Expense } from "../../models/expense";
+import type { Expense } from "../../models/expense";
 
 export default function useExpense(id: string) {
-  const [expense, setExpense] = useState<Expense>(new Expense());
-  const [showForm, setShowForm] = useState(false);
+  const [expense, setExpense] = useState<Expense>({} as Expense);
   const [editForm, setEditForm] = useState(false);
 
   const fetchExpense = () => {
@@ -19,10 +18,8 @@ export default function useExpense(id: string) {
 
   return {
     expense,
-    showForm,
-    setShowForm,
+    fetchExpense,
     editForm,
     setEditForm,
-    fetchExpense,
   };
 }

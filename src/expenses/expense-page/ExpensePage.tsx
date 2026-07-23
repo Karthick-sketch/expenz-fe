@@ -62,7 +62,7 @@ function ExpensePage(user: User) {
   const { id } = useParams();
   const navigate = useNavigate();
   const currency = getCurrencySymbol(user.currencyCode);
-  const { expense, editForm, setEditForm, fetchExpense } = useExpense(id!);
+  const { expense, fetchExpense, editForm, setEditForm } = useExpense(id!);
 
   const isLoaded = expense.id !== 0;
   const meta = getCategoryMeta(expense.category);
