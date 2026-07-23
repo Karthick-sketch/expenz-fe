@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { expenseApi, execute } from "../api/expenseApi";
+import { expenseApi, execute, throwError } from "../api/expenseApi";
 import { Expense } from "../../models/expense";
 
 export default function useExpense(id: string) {
@@ -7,9 +7,10 @@ export default function useExpense(id: string) {
   const [showForm, setShowForm] = useState(false);
   const [editForm, setEditForm] = useState(false);
 
-  const fetchExpense = async () => {
-    const data = await execute(() => expenseApi.getExpenseById(id));
-    setExpense(data);
+  const fetchExpense = () => {
+    execute(() => expenseApi.getExpenseById(id))
+      .then(setExpense)
+      .catch(throwError);
   };
 
   useEffect(() => {

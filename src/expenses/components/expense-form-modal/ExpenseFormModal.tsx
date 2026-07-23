@@ -6,7 +6,7 @@ import {
   useEffect,
 } from "react";
 import axios from "axios";
-import api from "../../../auth/interceptor/api";
+import { expenseApi, execute } from "../../api/expenseApi";
 import {
   EXPENSE_CATEGORIES,
   INCOME_CATEGORIES,
@@ -49,9 +49,8 @@ export default function ExpenseFormModal({
 
   /* Fetch available expense groups */
   useEffect(() => {
-    api
-      .get<ExpenseGroupList[]>("/expenses/groups")
-      .then((res) => setExpenseGroups(res.data))
+    execute(expenseApi.getExpenseGroups)
+      .then((expenseGroups) => setExpenseGroups(expenseGroups))
       .catch(() => {
         /* silently ignore — the field becomes invisible */
       });
@@ -71,17 +70,17 @@ export default function ExpenseFormModal({
     setLoading(true);
     setError(null);
     try {
-      const payload = {
+      const payload: Expense | ExpenseCreate = {
         ...expense,
         amount: Number(expense.amount),
         expenseGroupId: expense.expenseGroupId
           ? Number(expense.expenseGroupId)
-          : null,
+          : undefined,
       };
       if (isEdit && expenseUpdate?.id) {
-        await api.patch(`/expenses/${expenseUpdate.id}`, payload);
+        await execute(() => expenseApi.updateExpense(payload as Expense));
       } else {
-        await api.post("/expenses", payload);
+        await execute(() => expenseApi.createExpense(payload as ExpenseCreate));
       }
       onSuccess?.();
     } catch (err: unknown) {

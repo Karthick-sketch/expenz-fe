@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { expenseApi, execute } from "../api/expenseApi";
+import { expenseApi, execute, throwError } from "../api/expenseApi";
 import { ExpenseList } from "../../models/expense";
 import type { PieDataItem } from "../../models/pie-data-item";
 import useExpenseGroups from "./useExpenseGroups";
@@ -13,9 +13,10 @@ export default function useExpenses() {
   const [filter, setFilter] = useState("All");
   const { expenseGroups, fetchExpenseGroups } = useExpenseGroups();
 
-  const fetchExpenses = async () => {
-    const data = await execute(() => expenseApi.getThisMonthExpenses());
-    setExpenseList(data);
+  const fetchExpenses = () => {
+    execute(expenseApi.getThisMonthExpenses)
+      .then(setExpenseList)
+      .catch(throwError);
   };
 
   useEffect(() => {

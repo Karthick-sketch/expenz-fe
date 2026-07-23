@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { expenseApi, execute } from "../api/expenseApi";
+import { expenseApi, execute, throwError } from "../api/expenseApi";
 import type { PieDataItem } from "../../models/pie-data-item";
 import { ExpenseGroup } from "../../models/expense-group";
 import { calculateCategoryMap, mapPieDataItem } from "../util/expenseUtils";
@@ -10,9 +10,10 @@ export default function useExpenseGroup(id: string) {
   );
   const [showForm, setShowForm] = useState(false);
 
-  const fetchExpenseGroup = async () => {
-    const data = await execute(() => expenseApi.getExpenseGroupById(id));
-    setExpenseGroup(data);
+  const fetchExpenseGroup = () => {
+    execute(() => expenseApi.getExpenseGroupById(id))
+      .then(setExpenseGroup)
+      .catch(throwError);
   };
 
   useEffect(() => {

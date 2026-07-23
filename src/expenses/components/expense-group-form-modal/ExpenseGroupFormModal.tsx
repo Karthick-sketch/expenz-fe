@@ -5,7 +5,7 @@ import {
   useState,
 } from "react";
 import axios from "axios";
-import api from "../../../auth/interceptor/api";
+import { expenseApi, execute } from "../../api/expenseApi";
 import { ExpenseGroupCreate } from "../../../models/expense-group";
 /* Reuses modal + form styles from ExpenseFormModal.css */
 import "../expense-form-modal/ExpenseFormModal.css";
@@ -30,31 +30,31 @@ export default function ExpenseGroupFormModal({
 
   const set =
     (key: keyof ExpenseGroupCreate) =>
-    (
-      e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) =>
+    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setGroup((prev) => ({ ...prev, [key]: e.target.value }));
 
-  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
     setError(null);
-    try {
-      await api.post("/expenses/groups", group);
-      onSuccess?.();
-    } catch (err: unknown) {
-      setError("Failed to create expense group. Please try again.");
-      if (axios.isAxiosError(err)) {
-        console.error(
-          "ExpenseGroupForm submit error:",
-          err.response?.status ?? err.message,
-        );
-      } else {
-        console.error("ExpenseGroupForm submit error:", err);
-      }
-    } finally {
-      setLoading(false);
-    }
+    execute(() => expenseApi.createExpenseGroup(group))
+      .then(() => {
+        onSuccess?.();
+      })
+      .catch((err) => {
+        setError("Failed to create expense group. Please try again.");
+        if (axios.isAxiosError(err)) {
+          console.error(
+            "ExpenseGroupForm submit error:",
+            err.response?.status ?? err.message,
+          );
+        } else {
+          console.error("ExpenseGroupForm submit error:", err);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   function handleOverlayClick(e: MouseEvent<HTMLDivElement>) {

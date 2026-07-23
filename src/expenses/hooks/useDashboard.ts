@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { expenseApi, execute } from "../api/expenseApi";
+import { expenseApi, execute, throwError } from "../api/expenseApi";
 import type { PieDataItem } from "../../models/pie-data-item";
 import { DashboardData } from "../../models/dashboard-data";
 import useExpenseGroups from "./useExpenseGroups";
@@ -12,9 +12,10 @@ export default function useDashboard() {
   const [showForm, setShowForm] = useState(false);
   const { expenseGroups, fetchExpenseGroups } = useExpenseGroups();
 
-  const fetchDashboardData = async () => {
-    const data = await execute(() => expenseApi.getDashboardData());
-    setDashboardData(data);
+  const fetchDashboardData = () => {
+    execute(expenseApi.getDashboardData)
+      .then(setDashboardData)
+      .catch(throwError);
   };
 
   useEffect(() => {
