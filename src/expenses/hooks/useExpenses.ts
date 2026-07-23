@@ -3,7 +3,8 @@ import { expenseApi, execute, throwError } from "../api/expenseApi";
 import type { ExpenseList } from "../../models/expense";
 import type { PieDataItem } from "../../models/pie-data-item";
 import useExpenseGroups from "./useExpenseGroups";
-import { calculateCategoryMap, mapPieDataItem } from "../util/expenseUtils";
+import useExpenseCategory from "./useExpenseCategory";
+import { calculatePieData } from "../util/expenseUtils";
 
 export default function useExpenses() {
   const [expenseList, setExpenseList] = useState<ExpenseList>(
@@ -12,6 +13,7 @@ export default function useExpenses() {
   const [showForm, setShowForm] = useState(false);
   const [filter, setFilter] = useState("All");
   const { expenseGroups, fetchExpenseGroups } = useExpenseGroups();
+  const { categories } = useExpenseCategory();
 
   const fetchExpenses = () => {
     execute(expenseApi.getThisMonthExpenses)
@@ -23,18 +25,11 @@ export default function useExpenses() {
     fetchExpenses();
   }, []);
 
-  const expenseCategoryMap: Record<string, number> = {};
-  const incomeCategoryMap: Record<string, number> = {};
+  const expensePieData: PieDataItem[] = [];
+  const incomePieData: PieDataItem[] = [];
   const expenses = expenseList.expenses || [];
 
-  calculateCategoryMap(
-    expenses,
-    expenseCategoryMap,
-    incomeCategoryMap,
-  );
-
-  const pieData: PieDataItem[] = mapPieDataItem(expenseCategoryMap);
-  const incomePieData: PieDataItem[] = mapPieDataItem(incomeCategoryMap);
+  calculatePieData(expenses, categories, expensePieData, incomePieData);
 
   const filteredExpenses = expenses.filter((e) => {
     if (filter === "Expenses") return !e.income;
@@ -53,7 +48,7 @@ export default function useExpenses() {
     setFilter,
     fetchExpenses,
     fetchExpenseGroups,
-    pieData,
+    expensePieData,
     incomePieData,
     filteredExpenses,
     expenseGroups,

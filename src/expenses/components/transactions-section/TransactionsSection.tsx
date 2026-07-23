@@ -12,6 +12,7 @@ interface TransactionsSectionProps {
   recent?: boolean;
   expenseGroups?: ExpenseGroupList[];
   onCreateGroup?: () => void;
+  categoryColors: Record<string, string>;
 }
 
 function TransactionsSection({
@@ -22,6 +23,7 @@ function TransactionsSection({
   recent = false,
   expenseGroups = [],
   onCreateGroup,
+  categoryColors,
 }: TransactionsSectionProps) {
   return (
     <div className="transactions-section">
@@ -87,7 +89,11 @@ function TransactionsSection({
           )}
         </div>
         <div className="card-body">
-          <ExpensesList expenses={filteredExpenses} onOpenForm={onOpenForm} />
+          <ExpensesList
+            expenses={filteredExpenses}
+            categoryColors={categoryColors}
+            onOpenForm={onOpenForm}
+          />
         </div>
       </div>
     </div>

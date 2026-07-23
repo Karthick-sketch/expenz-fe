@@ -6,7 +6,6 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { CATEGORY_COLORS } from "../../constants/categories";
 import type { PieDataItem } from "../../../models/pie-data-item";
 import "./ExpensePieChart.css";
 import useCurrency from "../../hooks/useCurrency";
@@ -45,13 +44,13 @@ const CustomTooltip = ({ active, payload, currency }: CustomTooltipProps) => {
 };
 
 interface ExpensePieChartProps {
-  expenses: PieDataItem[];
+  pieData: PieDataItem[];
 }
 
-export default function ExpensePieChart({ expenses }: ExpensePieChartProps) {
+export default function ExpensePieChart({ pieData }: ExpensePieChartProps) {
   const currency = useCurrency();
 
-  if (!expenses || expenses.length === 0) {
+  if (!pieData || pieData.length === 0) {
     return (
       <div
         style={{
@@ -72,7 +71,7 @@ export default function ExpensePieChart({ expenses }: ExpensePieChartProps) {
     <ResponsiveContainer width="100%" height={320}>
       <PieChart>
         <Pie
-          data={expenses}
+          data={pieData}
           dataKey="value"
           nameKey="name"
           cx="50%"
@@ -85,14 +84,10 @@ export default function ExpensePieChart({ expenses }: ExpensePieChartProps) {
           }
           labelLine={true}
         >
-          {expenses.map((entry) => (
+          {pieData.map((data) => (
             <Cell
-              key={`cell-${entry.name}`}
-              fill={
-                CATEGORY_COLORS[
-                  entry.name.toLowerCase() as keyof typeof CATEGORY_COLORS
-                ] || CATEGORY_COLORS.other
-              }
+              key={`cell-${data.name}`}
+              fill={data.color}
               stroke="transparent"
             />
           ))}

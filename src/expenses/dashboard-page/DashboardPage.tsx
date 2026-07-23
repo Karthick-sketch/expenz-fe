@@ -7,6 +7,7 @@ import PageHeader from "../components/page-header/PageHeader";
 import StatsRow from "../components/stats-row/StatsRow";
 import TransactionsSection from "../components/transactions-section/TransactionsSection";
 import useDashboard from "../hooks/useDashboard";
+import useExpenseCategory from "../hooks/useExpenseCategory";
 import { User } from "../../models/user";
 import { CurrencyContext } from "../context/CurrencyContext";
 
@@ -17,10 +18,11 @@ export default function DashboardPage(user: User) {
     dashboardData,
     fetchDashboardData,
     fetchExpenseGroups,
-    pieData,
+    expensePieData,
     incomePieData,
     expenseGroups,
   } = useDashboard();
+  const { categoryColors } = useExpenseCategory();
 
   return (
     <AppLayout user={user}>
@@ -39,13 +41,17 @@ export default function DashboardPage(user: User) {
             incomeCount={dashboardData.totalIncomeCount}
             recent={true}
           />
-          <ChartsRow pieData={pieData} incomePieData={incomePieData} />
+          <ChartsRow
+            expensePieData={expensePieData}
+            incomePieData={incomePieData}
+          />
           <TransactionsSection
             filteredExpenses={dashboardData.recentExpenses}
             onOpenForm={() => setShowForm(true)}
             recent={true}
             expenseGroups={expenseGroups}
             onCreateGroup={() => setShowGroupForm(true)}
+            categoryColors={categoryColors}
           />
         </main>
 

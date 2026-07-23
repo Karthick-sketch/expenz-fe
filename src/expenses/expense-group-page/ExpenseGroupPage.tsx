@@ -1,14 +1,14 @@
+import "./ExpenseGroupPage.css";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AppLayout from "../app-layout/AppLayout";
 import ChartsRow from "../components/charts-row/ChartsRow";
 import ExpenseFormModal from "../components/expense-form-modal/ExpenseFormModal";
 import StatsRow from "../components/stats-row/StatsRow";
 import TransactionsSection from "../components/transactions-section/TransactionsSection";
 import useExpenseGroup from "../hooks/useExpenseGroup";
+import useExpenseCategory from "../hooks/useExpenseCategory";
 import { User } from "../../models/user";
-import { useParams } from "react-router-dom";
-import "./ExpenseGroupPage.css";
 import { CurrencyContext } from "../context/CurrencyContext";
 
 export default function ExpenseGroupPage(user: User) {
@@ -20,8 +20,9 @@ export default function ExpenseGroupPage(user: User) {
   }
 
   const [showForm, setShowForm] = useState(false);
-  const { expenseGroup, fetchExpenseGroup, pieData, incomePieData } =
+  const { expenseGroup, fetchExpenseGroup, expensePieData, incomePieData } =
     useExpenseGroup(id);
+  const { categoryColors } = useExpenseCategory();
 
   return (
     <AppLayout user={user}>
@@ -74,11 +75,15 @@ export default function ExpenseGroupPage(user: User) {
             incomeCount={expenseGroup.totalIncomesCount}
             recent={true}
           />
-          <ChartsRow pieData={pieData} incomePieData={incomePieData} />
+          <ChartsRow
+            expensePieData={expensePieData}
+            incomePieData={incomePieData}
+          />
           <TransactionsSection
             filteredExpenses={expenseGroup.expenses}
             onOpenForm={() => setShowForm(true)}
             recent={true}
+            categoryColors={categoryColors}
           />
         </main>
 

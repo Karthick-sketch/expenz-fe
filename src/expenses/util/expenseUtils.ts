@@ -1,27 +1,44 @@
 import type { Expense } from "../../models/expense";
 import type { PieDataItem } from "../../models/pie-data-item";
+import type { ExpenseCategory } from "../../models/expense-category";
 
-export const calculateCategoryMap = (
+export const calculatePieData = (
   expenses: Expense[],
-  expenseCategoryMap: Record<string, number>,
-  incomeCategoryMap: Record<string, number>,
+  categories: ExpenseCategory[],
+  expensePieData: PieDataItem[],
+  incomePieData: PieDataItem[],
 ) => {
   (expenses || []).forEach((e) => {
-    const cat = e.category || "Other";
+    const category = categories.find((c) => c.id === e.categoryId);
+    if (!category) {
+      return;
+    }
     if (e.income) {
-      incomeCategoryMap[cat] = (incomeCategoryMap[cat] || 0) + Number(e.amount);
+      const existingCategory = incomePieData.find(
+        (item) => item.name === category.name,
+      );
+      if (existingCategory) {
+        existingCategory.value += Number(e.amount);
+      } else {
+        incomePieData.push({
+          name: category.name.charAt(0).toUpperCase() + category.name.slice(1),
+          value: Number(e.amount),
+          color: category.colorHex,
+        });
+      }
     } else {
-      expenseCategoryMap[cat] =
-        (expenseCategoryMap[cat] || 0) + Number(e.amount);
+      const existingCategory = expensePieData.find(
+        (item) => item.name === category.name,
+      );
+      if (existingCategory) {
+        existingCategory.value += Number(e.amount);
+      } else {
+        expensePieData.push({
+          name: category.name.charAt(0).toUpperCase() + category.name.slice(1),
+          value: Number(e.amount),
+          color: category.colorHex,
+        });
+      }
     }
   });
-};
-
-export const mapPieDataItem = (
-  categoryMap: Record<string, number>,
-): PieDataItem[] => {
-  return Object.entries(categoryMap).map(([name, value]) => ({
-    name: name.charAt(0).toUpperCase() + name.slice(1),
-    value,
-  }));
 };

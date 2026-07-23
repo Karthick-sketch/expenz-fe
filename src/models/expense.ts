@@ -3,8 +3,9 @@ interface Expense {
   title: string;
   income: boolean;
   amount: number;
-  category: string;
   dateAdded: string;
+  categoryId: number;
+  subcategoryId: number;
   description?: string;
   expenseGroupId?: number;
 }
@@ -13,8 +14,9 @@ interface ExpenseCreate {
   title: string;
   income: boolean;
   amount: number;
-  category: string;
   dateAdded: string;
+  categoryId: number;
+  subcategoryId: number;
   description?: string;
   expenseGroupId?: number;
 }

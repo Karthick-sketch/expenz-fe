@@ -1,5 +1,8 @@
 import "./ExpensesPage.css";
+import { useState } from "react";
 import useExpenses from "./hooks/useExpenses";
+import useExpenseCategory from "./hooks/useExpenseCategory";
+import { CurrencyContext } from "./context/CurrencyContext";
 import AppLayout from "./app-layout/AppLayout";
 import PageHeader from "./components/page-header/PageHeader";
 import MonthNavigator from "./components/month-navigator/MonthNavigator";
@@ -9,8 +12,6 @@ import TransactionsSection from "./components/transactions-section/TransactionsS
 import ExpenseFormModal from "./components/expense-form-modal/ExpenseFormModal";
 import ExpenseGroupFormModal from "./components/expense-group-form-modal/ExpenseGroupFormModal";
 import { User } from "../models/user";
-import { useState } from "react";
-import { CurrencyContext } from "./context/CurrencyContext";
 
 function ExpensesPage(user: User) {
   const [showGroupForm, setShowGroupForm] = useState(false);
@@ -25,11 +26,12 @@ function ExpensesPage(user: User) {
     setFilter,
     fetchExpenses,
     fetchExpenseGroups,
-    pieData,
+    expensePieData,
     incomePieData,
     filteredExpenses,
     expenseGroups,
   } = useExpenses();
+  const { categoryColors } = useExpenseCategory();
 
   return (
     <AppLayout user={user}>
@@ -48,7 +50,10 @@ function ExpensesPage(user: User) {
             expenseCount={expenses.filter((e) => !e.income).length}
             incomeCount={expenses.filter((e) => e.income).length}
           />
-          <ChartsRow pieData={pieData} incomePieData={incomePieData} />
+          <ChartsRow
+            expensePieData={expensePieData}
+            incomePieData={incomePieData}
+          />
           <TransactionsSection
             filter={filter}
             setFilter={setFilter}
@@ -56,6 +61,7 @@ function ExpensesPage(user: User) {
             onOpenForm={() => setShowForm(true)}
             expenseGroups={expenseGroups}
             onCreateGroup={() => setShowGroupForm(true)}
+            categoryColors={categoryColors}
           />
         </main>
 

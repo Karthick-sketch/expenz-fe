@@ -3,11 +3,11 @@ import ExpensePieChart from "../expense-pie-chart/ExpensePieChart";
 import "./ChartsRow.css";
 
 interface ChartsRowProps {
-  pieData: PieDataItem[];
+  expensePieData: PieDataItem[];
   incomePieData: PieDataItem[];
 }
 
-function ChartsRow({ pieData, incomePieData }: ChartsRowProps) {
+function ChartsRow({ expensePieData, incomePieData }: ChartsRowProps) {
   return (
     <div className="charts-row">
       <div className="card chart-card">
@@ -15,7 +15,7 @@ function ChartsRow({ pieData, incomePieData }: ChartsRowProps) {
           <span className="card-title">Spending Breakdown</span>
         </div>
         <div className="card-body">
-          <ExpensePieChart expenses={pieData} />
+          <ExpensePieChart pieData={expensePieData} />
         </div>
       </div>
       <div className="card chart-card">
@@ -23,7 +23,7 @@ function ChartsRow({ pieData, incomePieData }: ChartsRowProps) {
           <span className="card-title">Income Breakdown</span>
         </div>
         <div className="card-body">
-          <ExpensePieChart expenses={incomePieData} />
+          <ExpensePieChart pieData={incomePieData} />
         </div>
       </div>
     </div>

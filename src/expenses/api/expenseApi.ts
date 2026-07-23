@@ -8,6 +8,10 @@ import type {
   ExpenseGroupList,
 } from "../../models/expense-group";
 import type { DashboardData } from "../../models/dashboard-data";
+import type {
+  ExpenseCategory,
+  ExpenseSubCategory,
+} from "../../models/expense-category";
 
 export const expenseApi = {
   // GET methods
@@ -17,6 +21,12 @@ export const expenseApi = {
   getExpenseGroupById: (id: string) =>
     api.get<ExpenseGroup>(`/expenses/groups/${id}`),
   getDashboardData: () => api.get<DashboardData>("/expenses/dashboard"),
+  getExpenseCategories: () =>
+    api.get<ExpenseCategory[]>("/expenses/categories"),
+  getExpenseSubCategories: (categoryId: number) =>
+    api.get<ExpenseSubCategory[]>(
+      `/expenses/categories/${categoryId}/sub-categories`,
+    ),
 
   // POST methods
   createExpense: (expense: ExpenseCreate) =>

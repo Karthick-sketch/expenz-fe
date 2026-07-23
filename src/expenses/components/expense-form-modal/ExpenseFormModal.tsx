@@ -1,3 +1,4 @@
+import "./ExpenseFormModal.css";
 import {
   type ChangeEvent,
   type SubmitEvent,
@@ -7,19 +8,16 @@ import {
 } from "react";
 import axios from "axios";
 import { expenseApi, execute } from "../../api/expenseApi";
-import {
-  EXPENSE_CATEGORIES,
-  INCOME_CATEGORIES,
-} from "../../constants/categories";
-import "./ExpenseFormModal.css";
 import { Expense, ExpenseCreate } from "../../../models/expense";
 import type { ExpenseGroupList } from "../../../models/expense-group";
+import useExpenseCategory from "../../hooks/useExpenseCategory";
 
 const INITIAL: ExpenseCreate = {
   title: "",
   income: false,
   amount: 0,
-  category: "food",
+  categoryId: 0,
+  subcategoryId: 0,
   description: "",
   dateAdded: new Date().toISOString().split("T")[0],
 };
@@ -46,6 +44,8 @@ export default function ExpenseFormModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [expenseGroups, setExpenseGroups] = useState<ExpenseGroupList[]>([]);
+  const { categories, subCategories, fetchSubCategories } =
+    useExpenseCategory();
 
   /* Fetch available expense groups */
   useEffect(() => {
@@ -182,7 +182,6 @@ export default function ExpenseFormModal({
                   <label htmlFor="typeIncome">Income</label>
                 </div>
               </div>
-
               {/* Title */}
               <div className="form-field span-2">
                 <label className="form-label" htmlFor="exp-title">
@@ -198,7 +197,6 @@ export default function ExpenseFormModal({
                   required
                 />
               </div>
-
               {/* Amount */}
               <div className="form-field">
                 <label className="form-label" htmlFor="exp-amount">
@@ -216,29 +214,6 @@ export default function ExpenseFormModal({
                   required
                 />
               </div>
-
-              {/* Category — expense or income variants */}
-              <div className="form-field">
-                <label className="form-label" htmlFor="exp-category">
-                  Category
-                </label>
-                <select
-                  id="exp-category"
-                  className="form-select"
-                  value={expense.category}
-                  onChange={set("category")}
-                >
-                  {(expense.income
-                    ? INCOME_CATEGORIES
-                    : EXPENSE_CATEGORIES
-                  ).map(({ value, label }) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
               {/* Date */}
               <div className="form-field">
                 <label className="form-label" htmlFor="exp-dateAdded">
@@ -253,7 +228,47 @@ export default function ExpenseFormModal({
                   required
                 />
               </div>
-
+              {/* Category */}
+              <div className="form-field">
+                <label className="form-label" htmlFor="exp-category">
+                  Category
+                </label>
+                <select
+                  id="exp-category"
+                  className="form-select"
+                  value={expense.categoryId}
+                  onChange={(e) => {
+                    set("categoryId")(e);
+                    fetchSubCategories(Number(e.target.value));
+                  }}
+                >
+                  <option value="0">Select Category</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {/* SubCategory */}
+              <div className="form-field">
+                <label className="form-label" htmlFor="exp-category">
+                  Subcategory
+                </label>
+                <select
+                  id="exp-category"
+                  className="form-select"
+                  value={expense.subcategoryId}
+                  onChange={set("subcategoryId")}
+                >
+                  <option value="0">Select Subcategory</option>
+                  {subCategories.map((subcategory) => (
+                    <option key={subcategory.id} value={subcategory.id}>
+                      {subcategory.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
               {/* Expense Group (optional) */}
               {expenseGroups.length > 0 && (
                 <div className="form-field span-2">
@@ -283,7 +298,6 @@ export default function ExpenseFormModal({
                   </select>
                 </div>
               )}
-
               {/* Description */}
               <div className="form-field span-2">
                 <label className="form-label" htmlFor="exp-description">

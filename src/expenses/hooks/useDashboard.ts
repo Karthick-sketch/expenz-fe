@@ -3,7 +3,8 @@ import { expenseApi, execute, throwError } from "../api/expenseApi";
 import type { PieDataItem } from "../../models/pie-data-item";
 import type { DashboardData } from "../../models/dashboard-data";
 import useExpenseGroups from "./useExpenseGroups";
-import { calculateCategoryMap, mapPieDataItem } from "../util/expenseUtils";
+import { calculatePieData } from "../util/expenseUtils";
+import useExpenseCategory from "./useExpenseCategory";
 
 export default function useDashboard() {
   const [dashboardData, setDashboardData] = useState<DashboardData>(
@@ -11,6 +12,7 @@ export default function useDashboard() {
   );
   const [showForm, setShowForm] = useState(false);
   const { expenseGroups, fetchExpenseGroups } = useExpenseGroups();
+  const { categories } = useExpenseCategory();
 
   const fetchDashboardData = () => {
     execute(expenseApi.getDashboardData)
@@ -22,18 +24,16 @@ export default function useDashboard() {
     fetchDashboardData();
   }, []);
 
-  const expenseCategoryMap: Record<string, number> = {};
-  const incomeCategoryMap: Record<string, number> = {};
+  const expensePieData: PieDataItem[] = [];
+  const incomePieData: PieDataItem[] = [];
   dashboardData.recentExpenses = dashboardData.recentExpenses || [];
 
-  calculateCategoryMap(
+  calculatePieData(
     dashboardData.recentExpenses,
-    expenseCategoryMap,
-    incomeCategoryMap,
+    categories,
+    expensePieData,
+    incomePieData,
   );
-
-  const pieData: PieDataItem[] = mapPieDataItem(expenseCategoryMap);
-  const incomePieData: PieDataItem[] = mapPieDataItem(incomeCategoryMap);
 
   return {
     dashboardData,
@@ -41,7 +41,7 @@ export default function useDashboard() {
     setShowForm,
     fetchDashboardData,
     fetchExpenseGroups,
-    pieData,
+    expensePieData,
     incomePieData,
     expenseGroups,
   };
