@@ -1,5 +1,4 @@
-import axios from "axios";
-import type { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import api from "../../auth/interceptor/api";
 import type { Expense, ExpenseCreate, ExpenseList } from "../../models/expense";
 import type {
@@ -12,10 +11,14 @@ import type {
   ExpenseCategory,
   ExpenseSubCategory,
 } from "../../models/expense-category";
+import type { ExpenseFilter } from "../../models/expense-filter";
 
 export const expenseApi = {
+  // QUERY methods
+  queryExpenses: (filter: ExpenseFilter) =>
+    api.post<ExpenseList>("/expenses/query", filter),
+
   // GET methods
-  getThisMonthExpenses: () => api.get<ExpenseList>("/expenses/this-month"),
   getExpenseById: (id: string) => api.get<Expense>(`/expenses/${id}`),
   getExpenseGroups: () => api.get<ExpenseGroupList[]>("/expenses/groups"),
   getExpenseGroupById: (id: string) =>

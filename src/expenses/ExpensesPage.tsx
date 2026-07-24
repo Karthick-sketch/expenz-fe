@@ -5,7 +5,7 @@ import useExpenseCategory from "./hooks/useExpenseCategory";
 import { CurrencyContext } from "./context/CurrencyContext";
 import AppLayout from "./app-layout/AppLayout";
 import PageHeader from "./components/page-header/PageHeader";
-import MonthNavigator from "./components/month-navigator/MonthNavigator";
+import ExpenseFilter from "./components/expense-filter/ExpenseFilter";
 import StatsRow from "./components/stats-row/StatsRow";
 import ChartsRow from "./components/charts-row/ChartsRow";
 import TransactionsSection from "./components/transactions-section/TransactionsSection";
@@ -28,7 +28,6 @@ function ExpensesPage(user: User) {
     fetchExpenseGroups,
     expensePieData,
     incomePieData,
-    filteredExpenses,
     expenseGroups,
   } = useExpenses();
   const { categoryColors } = useExpenseCategory();
@@ -42,7 +41,11 @@ function ExpensesPage(user: User) {
             subtitle="Track and manage your spending"
             onAddExpense={() => setShowForm(true)}
           />
-          <MonthNavigator />
+          <ExpenseFilter
+            filter={filter}
+            setFilter={setFilter}
+            fetchExpenses={fetchExpenses}
+          />
           <StatsRow
             balance={balanceAmount}
             totalExpenses={totalExpensesAmount}
@@ -55,9 +58,7 @@ function ExpensesPage(user: User) {
             incomePieData={incomePieData}
           />
           <TransactionsSection
-            filter={filter}
-            setFilter={setFilter}
-            filteredExpenses={filteredExpenses}
+            expenses={expenses}
             onOpenForm={() => setShowForm(true)}
             expenseGroups={expenseGroups}
             onCreateGroup={() => setShowGroupForm(true)}

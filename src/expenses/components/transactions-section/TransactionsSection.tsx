@@ -1,14 +1,12 @@
+import "./TransactionsSection.css";
 import type { Expense } from "../../../models/expense";
 import type { ExpenseGroupList } from "../../../models/expense-group";
 import ExpensesList from "../expenses-list/ExpensesList";
 import ExpenseGroupItem from "../expense-group-item/ExpenseGroupItem";
-import "./TransactionsSection.css";
 
 interface TransactionsSectionProps {
-  filteredExpenses: Expense[];
+  expenses: Expense[];
   onOpenForm: () => void;
-  filter?: string | null;
-  setFilter?: ((value: string) => void) | null;
   recent?: boolean;
   expenseGroups?: ExpenseGroupList[];
   onCreateGroup?: () => void;
@@ -16,10 +14,8 @@ interface TransactionsSectionProps {
 }
 
 function TransactionsSection({
-  filteredExpenses,
+  expenses,
   onOpenForm,
-  filter = null,
-  setFilter = null,
   recent = false,
   expenseGroups = [],
   onCreateGroup,
@@ -71,26 +67,10 @@ function TransactionsSection({
             {recent && "Recent "}
             Transactions
           </span>
-          {filter && setFilter && (
-            <select
-              className="form-select"
-              style={{
-                width: "auto",
-                padding: "0.4rem 2rem 0.4rem 0.8rem",
-                fontSize: "0.85rem",
-              }}
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-            >
-              <option value="All">All</option>
-              <option value="Expenses">Expenses</option>
-              <option value="Incomes">Incomes</option>
-            </select>
-          )}
         </div>
         <div className="card-body">
           <ExpensesList
-            expenses={filteredExpenses}
+            expenses={expenses}
             categoryColors={categoryColors}
             onOpenForm={onOpenForm}
           />

@@ -5,18 +5,30 @@ import type { PieDataItem } from "../../models/pie-data-item";
 import useExpenseGroups from "./useExpenseGroups";
 import useExpenseCategory from "./useExpenseCategory";
 import { calculatePieData } from "../util/expenseUtils";
+import type { ExpenseFilter } from "../../models/expense-filter";
+import { ExpenseDuration, ExpenseType } from "../../enums/expense-enums";
+
+const INITIATE: ExpenseFilter = {
+  type: ExpenseType.ALL,
+  subCategoryId: undefined,
+  duration: ExpenseDuration.THIS_WEEK,
+  fromDate: undefined,
+  toDate: undefined,
+  searchTerm: undefined,
+};
 
 export default function useExpenses() {
   const [expenseList, setExpenseList] = useState<ExpenseList>(
     {} as ExpenseList,
   );
   const [showForm, setShowForm] = useState(false);
-  const [filter, setFilter] = useState("All");
+  const [filter, setFilter] = useState<ExpenseFilter>(INITIATE);
+
   const { expenseGroups, fetchExpenseGroups } = useExpenseGroups();
   const { categories } = useExpenseCategory();
 
   const fetchExpenses = () => {
-    execute(expenseApi.getThisMonthExpenses)
+    execute(() => expenseApi.queryExpenses(filter))
       .then(setExpenseList)
       .catch(throwError);
   };
@@ -31,12 +43,6 @@ export default function useExpenses() {
 
   calculatePieData(expenses, categories, expensePieData, incomePieData);
 
-  const filteredExpenses = expenses.filter((e) => {
-    if (filter === "Expenses") return !e.income;
-    if (filter === "Incomes") return e.income;
-    return true;
-  });
-
   return {
     expenses,
     totalExpensesAmount: expenseList.totalExpensesAmount || 0,
@@ -50,7 +56,6 @@ export default function useExpenses() {
     fetchExpenseGroups,
     expensePieData,
     incomePieData,
-    filteredExpenses,
     expenseGroups,
   };
 }
