@@ -85,7 +85,7 @@ function ExpenseFilter({
           type="search"
           className="filter-search"
           placeholder="Search Expenses"
-          value={filter.searchTerm}
+          value={filter.searchTerm ?? ""}
           onChange={set("searchTerm")}
         />
       </div>
@@ -96,7 +96,7 @@ function ExpenseFilter({
           <select
             className="filter-select"
             onChange={set("type")}
-            value={filter.type}
+            value={filter.type ?? ExpenseType.ALL}
           >
             <option value={ExpenseType.ALL}>All</option>
             <option value={ExpenseType.EXPENSE}>Expenses</option>
@@ -108,7 +108,7 @@ function ExpenseFilter({
           <select
             className="filter-select"
             onChange={handleCategory}
-            value={filter.categoryId}
+            value={filter.categoryId ?? 0}
           >
             <option value="0">All Categories</option>
             {categories &&
@@ -125,7 +125,7 @@ function ExpenseFilter({
           <select
             className="filter-select"
             onChange={set("subCategoryId")}
-            value={filter.subCategoryId}
+            value={filter.subCategoryId ?? 0}
           >
             <option value="0">All Subcategories</option>
             {subCategories &&
@@ -142,7 +142,7 @@ function ExpenseFilter({
           <select
             className="filter-select"
             onChange={handleDuration}
-            value={filter.duration}
+            value={filter.duration ?? ExpenseDuration.THIS_MONTH}
           >
             <option value={ExpenseDuration.THIS_MONTH}>This Month</option>
             <option value={ExpenseDuration.LAST_MONTH}>Last Month</option>
@@ -161,7 +161,7 @@ function ExpenseFilter({
               <input
                 type="date"
                 className="filter-date"
-                value={filter.fromDate}
+                value={filter.fromDate ?? ""}
                 onChange={set("fromDate")}
               />
             </div>
@@ -170,7 +170,7 @@ function ExpenseFilter({
                 type="date"
                 className="filter-date"
                 onChange={set("toDate")}
-                value={filter.toDate}
+                value={filter.toDate ?? ""}
               />
             </div>
           </>
