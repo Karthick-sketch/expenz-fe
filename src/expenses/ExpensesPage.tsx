@@ -30,7 +30,8 @@ function ExpensesPage(user: User) {
     incomePieData,
     expenseGroups,
   } = useExpenses();
-  const { categoryColors } = useExpenseCategory();
+  const { categoryColors, categories, subCategories, fetchSubCategories } =
+    useExpenseCategory();
 
   return (
     <AppLayout user={user}>
@@ -42,6 +43,9 @@ function ExpensesPage(user: User) {
             onAddExpense={() => setShowForm(true)}
           />
           <ExpenseFilter
+            categories={categories}
+            subCategories={subCategories}
+            fetchSubCategories={fetchSubCategories}
             filter={filter}
             setFilter={setFilter}
             fetchExpenses={fetchExpenses}

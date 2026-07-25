@@ -8,14 +8,24 @@ import {
 } from "react";
 import type { ExpenseFilter } from "../../../models/expense-filter";
 import { ExpenseDuration, ExpenseType } from "../../../enums/expense-enums";
+import {
+  ExpenseCategory,
+  ExpenseSubCategory,
+} from "../../../models/expense-category";
 
 interface ExpenseFilterProps {
+  categories: ExpenseCategory[];
+  subCategories: ExpenseSubCategory[];
+  fetchSubCategories: (categoryId: number) => void;
   filter: ExpenseFilter;
   setFilter: Dispatch<SetStateAction<ExpenseFilter>>;
   fetchExpenses: () => void;
 }
 
 function ExpenseFilter({
+  categories,
+  subCategories,
+  fetchSubCategories,
   filter,
   setFilter,
   fetchExpenses,
@@ -26,6 +36,15 @@ function ExpenseFilter({
     (key: keyof ExpenseFilter) =>
     (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
       setFilter((prev: ExpenseFilter) => ({ ...prev, [key]: e.target.value }));
+
+  const handleCategory = (e: ChangeEvent<HTMLSelectElement>) => {
+    const categoryId = parseInt(e.target.value);
+    if (categoryId === 0) {
+      set("subCategoryId")(e);
+    }
+    fetchSubCategories(categoryId);
+    set("categoryId")(e);
+  };
 
   const handleDuration = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
@@ -48,14 +67,25 @@ function ExpenseFilter({
         <option value={ExpenseType.EXPENSE}>Expenses</option>
         <option value={ExpenseType.INCOME}>Incomes</option>
       </select>
+      <select onChange={handleCategory} value={filter.categoryId}>
+        <option value="0">All Categories</option>
+        {categories &&
+          categories.length > 0 &&
+          categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+      </select>
       <select onChange={set("subCategoryId")} value={filter.subCategoryId}>
-        <option value="all">All Categories</option>
-        <option value="category">Food</option>
-        <option value="category">Transport</option>
-        <option value="category">Shopping</option>
-        <option value="category">Utilities</option>
-        <option value="category">Entertainment</option>
-        <option value="category">Other</option>
+        <option value="0">All Subcategories</option>
+        {subCategories &&
+          subCategories.length > 0 &&
+          subCategories.map((subCategory) => (
+            <option key={subCategory.id} value={subCategory.id}>
+              {subCategory.name}
+            </option>
+          ))}
       </select>
       <select onChange={handleDuration} value={filter.duration}>
         <option value={ExpenseDuration.THIS_MONTH}>This Month</option>

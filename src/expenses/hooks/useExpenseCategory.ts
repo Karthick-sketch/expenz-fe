@@ -29,6 +29,10 @@ export default function useExpenseCategory() {
   };
 
   const fetchSubCategories = (categoryId: number) => {
+    if (!categoryId) {
+      setSubCategories([]);
+      return;
+    }
     execute(() => expenseApi.getExpenseSubCategories(categoryId))
       .then(setSubCategories)
       .catch(throwError);
