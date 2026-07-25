@@ -40,7 +40,10 @@ function ExpenseFilter({
   const handleCategory = (e: ChangeEvent<HTMLSelectElement>) => {
     const categoryId = parseInt(e.target.value);
     if (categoryId === 0) {
-      set("subCategoryId")(e);
+      setFilter({
+        ...filter,
+        subCategoryId: 0,
+      });
     }
     fetchSubCategories(categoryId);
     set("categoryId")(e);
@@ -52,67 +55,127 @@ function ExpenseFilter({
       setShowDateRange(true);
     } else {
       setShowDateRange(false);
-      set("duration")(e);
+      setFilter({
+        ...filter,
+        fromDate: "",
+        toDate: "",
+      });
     }
+    set("duration")(e);
   };
 
+  const isIncompleteDateRange =
+    filter.duration === ExpenseDuration.DATE_RANGE &&
+    !filter.fromDate &&
+    !filter.toDate;
+
   useEffect(() => {
+    if (isIncompleteDateRange) {
+      return;
+    }
+
     fetchExpenses();
   }, [filter]);
 
   return (
     <div className="filter-container">
-      <select onChange={set("type")} value={filter.type}>
-        <option value={ExpenseType.ALL}>All</option>
-        <option value={ExpenseType.EXPENSE}>Expenses</option>
-        <option value={ExpenseType.INCOME}>Incomes</option>
-      </select>
-      <select onChange={handleCategory} value={filter.categoryId}>
-        <option value="0">All Categories</option>
-        {categories &&
-          categories.length > 0 &&
-          categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-      </select>
-      <select onChange={set("subCategoryId")} value={filter.subCategoryId}>
-        <option value="0">All Subcategories</option>
-        {subCategories &&
-          subCategories.length > 0 &&
-          subCategories.map((subCategory) => (
-            <option key={subCategory.id} value={subCategory.id}>
-              {subCategory.name}
-            </option>
-          ))}
-      </select>
-      <select onChange={handleDuration} value={filter.duration}>
-        <option value={ExpenseDuration.THIS_MONTH}>This Month</option>
-        <option value={ExpenseDuration.LAST_MONTH}>Last Month</option>
-        <option value={ExpenseDuration.THIS_WEEK}>This Week</option>
-        <option value={ExpenseDuration.LAST_WEEK}>Last Week</option>
-        <option value={ExpenseDuration.THIS_YEAR}>This Year</option>
-        <option value={ExpenseDuration.LAST_YEAR}>Last Year</option>
-        <option value={ExpenseDuration.ALL_TIME}>All Time</option>
-        <option value={ExpenseDuration.DATE_RANGE}>Date Range</option>
-      </select>
-      {showDateRange && (
-        <div className="date-range-inputs d-flex align-items-center gap-2">
-          <input
-            type="date"
-            value={filter.fromDate}
-            onChange={set("fromDate")}
-          />
-          <input type="date" onChange={set("toDate")} value={filter.toDate} />
+      {/* Search */}
+      <div className="filter-search-container">
+        <input
+          type="search"
+          className="filter-search"
+          placeholder="Search Expenses"
+          value={filter.searchTerm}
+          onChange={set("searchTerm")}
+        />
+      </div>
+
+      {/* Filters */}
+      <div className="filter-field-container">
+        <div className="filter-field">
+          <select
+            className="filter-select"
+            onChange={set("type")}
+            value={filter.type}
+          >
+            <option value={ExpenseType.ALL}>All</option>
+            <option value={ExpenseType.EXPENSE}>Expenses</option>
+            <option value={ExpenseType.INCOME}>Incomes</option>
+          </select>
         </div>
-      )}
-      <input
-        type="search"
-        placeholder="Search Expenses"
-        value={filter.searchTerm}
-        onChange={set("searchTerm")}
-      />
+
+        <div className="filter-field">
+          <select
+            className="filter-select"
+            onChange={handleCategory}
+            value={filter.categoryId}
+          >
+            <option value="0">All Categories</option>
+            {categories &&
+              categories.length > 0 &&
+              categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+          </select>
+        </div>
+
+        <div className="filter-field">
+          <select
+            className="filter-select"
+            onChange={set("subCategoryId")}
+            value={filter.subCategoryId}
+          >
+            <option value="0">All Subcategories</option>
+            {subCategories &&
+              subCategories.length > 0 &&
+              subCategories.map((subCategory) => (
+                <option key={subCategory.id} value={subCategory.id}>
+                  {subCategory.name}
+                </option>
+              ))}
+          </select>
+        </div>
+
+        <div className="filter-field">
+          <select
+            className="filter-select"
+            onChange={handleDuration}
+            value={filter.duration}
+          >
+            <option value={ExpenseDuration.THIS_MONTH}>This Month</option>
+            <option value={ExpenseDuration.LAST_MONTH}>Last Month</option>
+            <option value={ExpenseDuration.THIS_WEEK}>This Week</option>
+            <option value={ExpenseDuration.LAST_WEEK}>Last Week</option>
+            <option value={ExpenseDuration.THIS_YEAR}>This Year</option>
+            <option value={ExpenseDuration.LAST_YEAR}>Last Year</option>
+            <option value={ExpenseDuration.ALL_TIME}>All Time</option>
+            <option value={ExpenseDuration.DATE_RANGE}>Date Range</option>
+          </select>
+        </div>
+
+        {showDateRange && (
+          <>
+            <div className="filter-field">
+              <input
+                type="date"
+                className="filter-date"
+                value={filter.fromDate}
+                onChange={set("fromDate")}
+              />
+            </div>
+            <div className="filter-field">
+              <input
+                type="date"
+                className="filter-date"
+                onChange={set("toDate")}
+                value={filter.toDate}
+              />
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }

@@ -80,7 +80,7 @@ export default function ExpenseGroupPage(user: User) {
             incomePieData={incomePieData}
           />
           <TransactionsSection
-            filteredExpenses={expenseGroup.expenses}
+            expenses={expenseGroup.expenses}
             onOpenForm={() => setShowForm(true)}
             recent={true}
             categoryColors={categoryColors}

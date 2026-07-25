@@ -46,7 +46,7 @@ export default function DashboardPage(user: User) {
             incomePieData={incomePieData}
           />
           <TransactionsSection
-            filteredExpenses={dashboardData.recentExpenses}
+            expenses={dashboardData.recentExpenses}
             onOpenForm={() => setShowForm(true)}
             recent={true}
             expenseGroups={expenseGroups}
