@@ -11,7 +11,7 @@ import { ExpenseDuration, ExpenseType } from "../../enums/expense-enums";
 const INITIATE: ExpenseFilter = {
   type: ExpenseType.ALL,
   subCategoryId: undefined,
-  duration: ExpenseDuration.THIS_WEEK,
+  duration: ExpenseDuration.THIS_MONTH,
   fromDate: undefined,
   toDate: undefined,
   searchTerm: undefined,
