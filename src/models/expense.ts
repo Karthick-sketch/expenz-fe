@@ -21,13 +21,12 @@ interface ExpenseCreate {
   expenseGroupId?: number;
 }
 
-interface ExpenseList {
+interface ExpenseSummary {
   totalExpensesCount: number;
   totalIncomesCount: number;
   totalExpensesAmount: number;
   totalIncomesAmount: number;
   balanceAmount: number;
-  expenses: Expense[];
 }
 
-export type { Expense, ExpenseCreate, ExpenseList };
+export type { Expense, ExpenseCreate, ExpenseSummary };

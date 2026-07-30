@@ -8,6 +8,8 @@ interface ExpenseFilter {
   fromDate?: string;
   toDate?: string;
   searchTerm?: string;
+  page?: number;
+  size?: number;
 }
 
 export type { ExpenseFilter };
