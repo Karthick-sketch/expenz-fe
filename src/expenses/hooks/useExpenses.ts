@@ -7,6 +7,7 @@ import useExpenseCategory from "./useExpenseCategory";
 import { calculatePieData } from "../util/expenseUtils";
 import type { ExpenseFilter } from "../../models/expense-filter";
 import { ExpenseDuration, ExpenseType } from "../../enums/expense-enums";
+import { PageInfo } from "../../models/page-info";
 
 const INITIATE: ExpenseFilter = {
   type: ExpenseType.ALL,
@@ -19,6 +20,13 @@ const INITIATE: ExpenseFilter = {
   size: 20,
 };
 
+const INITIATE_PAGE_INFO: PageInfo = {
+  pageNumber: 0,
+  pageSize: 20,
+  totalElements: 0,
+  totalPages: 0,
+};
+
 export default function useExpenses() {
   const [expenseSummary, setExpenseSummary] = useState<ExpenseSummary>(
     {} as ExpenseSummary,
@@ -26,6 +34,8 @@ export default function useExpenses() {
   const [expenseList, setExpenseList] = useState<Expense[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [filter, setFilter] = useState<ExpenseFilter>(INITIATE);
+  const [pageInfo, setPageInfo] = useState<PageInfo>(INITIATE_PAGE_INFO);
+  const [pageChangeTrigger, setPageChangeTrigger] = useState(false);
 
   const { expenseGroups, fetchExpenseGroups } = useExpenseGroups();
   const { categories } = useExpenseCategory();
@@ -38,12 +48,43 @@ export default function useExpenses() {
 
   const fetchList = () => {
     execute(() => expenseApi.queryExpenses(filter))
-      .then(setExpenseList)
+      .then((data) => {
+        setExpenseList(data.content);
+        setPageInfo({
+          pageNumber: data.number,
+          pageSize: data.size,
+          totalElements: data.totalElements,
+          totalPages: data.totalPages,
+        });
+        setPageChangeTrigger(false);
+      })
       .catch(throwError);
   };
 
+  const nextPage = () => {
+    if (pageInfo.pageNumber < pageInfo.totalPages - 1) {
+      setPageChangeTrigger(true);
+      setFilter((prevFilter) => ({
+        ...prevFilter,
+        page: pageInfo.pageNumber + 1,
+      }));
+    }
+  };
+
+  const prevPage = () => {
+    if (pageInfo.pageNumber > 0) {
+      setPageChangeTrigger(true);
+      setFilter((prevFilter) => ({
+        ...prevFilter,
+        page: pageInfo.pageNumber - 1,
+      }));
+    }
+  };
+
   const fetchExpenses = () => {
-    fetchSummary();
+    if (!pageChangeTrigger) {
+      fetchSummary();
+    }
     fetchList();
   };
 
@@ -71,5 +112,8 @@ export default function useExpenses() {
     expensePieData,
     incomePieData,
     expenseGroups,
+    pageInfo,
+    nextPage,
+    prevPage,
   };
 }

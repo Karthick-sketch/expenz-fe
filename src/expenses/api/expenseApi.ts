@@ -3,6 +3,7 @@ import api from "../../auth/interceptor/api";
 import type {
   Expense,
   ExpenseCreate,
+  ExpensePage,
   ExpenseSummary,
 } from "../../models/expense";
 import type {
@@ -22,7 +23,7 @@ export const expenseApi = {
   querySummary: (filter: ExpenseFilter) =>
     api.post<ExpenseSummary>("/expenses/query/summary", filter),
   queryExpenses: (filter: ExpenseFilter) =>
-    api.post<Expense[]>("/expenses/query", filter),
+    api.post<ExpensePage>("/expenses/query", filter),
 
   // GET methods
   getExpenseById: (id: string) => api.get<Expense>(`/expenses/${id}`),

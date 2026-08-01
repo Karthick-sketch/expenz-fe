@@ -3,6 +3,7 @@ import type { Expense } from "../../../models/expense";
 import type { ExpenseGroupList } from "../../../models/expense-group";
 import ExpensesList from "../expenses-list/ExpensesList";
 import ExpenseGroupItem from "../expense-group-item/ExpenseGroupItem";
+import { PageInfo } from "../../../models/page-info";
 
 interface TransactionsSectionProps {
   expenses: Expense[];
@@ -11,6 +12,9 @@ interface TransactionsSectionProps {
   expenseGroups?: ExpenseGroupList[];
   onCreateGroup?: () => void;
   categoryColors: Record<string, string>;
+  pageInfo: PageInfo;
+  nextPage: () => void;
+  prevPage: () => void;
 }
 
 function TransactionsSection({
@@ -20,6 +24,9 @@ function TransactionsSection({
   expenseGroups = [],
   onCreateGroup,
   categoryColors,
+  pageInfo,
+  nextPage,
+  prevPage,
 }: TransactionsSectionProps) {
   return (
     <div className="transactions-section">
@@ -67,6 +74,52 @@ function TransactionsSection({
             {recent && "Recent "}
             Transactions
           </span>
+          {!recent && (
+            <div className="card-pagination">
+              <button onClick={prevPage}>
+                <svg
+                  className="backward"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15 6L9 12L15 18"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+              <div className="page-info">
+                <span className="font-bold">
+                  {pageInfo.pageNumber * pageInfo.pageSize + 1} -{" "}
+                  {Math.min(
+                    pageInfo.pageNumber * pageInfo.pageSize + pageInfo.pageSize,
+                    pageInfo.totalElements,
+                  )}
+                </span>{" "}
+                of {pageInfo.totalElements}
+              </div>
+              <button onClick={nextPage}>
+                <svg
+                  className="forward"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9 6L15 12L9 18"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
         <div className="card-body">
           <ExpensesList

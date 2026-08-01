@@ -77,3 +77,35 @@
 .empty-groups-link:hover {
   opacity: 0.75;
 }
+
+.card-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: small;
+}
+
+.card-pagination > button {
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.card-pagination .forward,
+.card-pagination .backward {
+  width: 20px;
+  height: 20px;
+  color: white;
+  transition: color var(--transition);
+}
+
+.card-pagination button:hover .forward,
+.card-pagination button:hover .backward,
+.card-pagination .forward:hover,
+.card-pagination .backward:hover {
+  color: var(--accent);
+}

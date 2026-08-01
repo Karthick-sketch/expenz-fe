@@ -29,6 +29,9 @@ function ExpensesPage(user: User) {
     expensePieData,
     incomePieData,
     expenseGroups,
+    pageInfo,
+    nextPage,
+    prevPage,
   } = useExpenses();
   const { categoryColors, categories, subCategories, fetchSubCategories } =
     useExpenseCategory();
@@ -67,6 +70,9 @@ function ExpensesPage(user: User) {
             expenseGroups={expenseGroups}
             onCreateGroup={() => setShowGroupForm(true)}
             categoryColors={categoryColors}
+            pageInfo={pageInfo}
+            nextPage={nextPage}
+            prevPage={prevPage}
           />
         </main>
 
