@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import { expenseApi, execute, throwError } from "../api/expenseApi";
-import type { Expense, ExpenseSummary } from "../../models/expense";
-import type { PieDataItem } from "../../models/pie-data-item";
 import useExpenseGroups from "./useExpenseGroups";
-import useExpenseCategory from "./useExpenseCategory";
-import { calculatePieData } from "../util/expenseUtils";
+import type { Expense, ExpenseSummary } from "../../models/expense";
 import type { ExpenseFilter } from "../../models/expense-filter";
 import { ExpenseDuration, ExpenseType } from "../../enums/expense-enums";
 import { PageInfo } from "../../models/page-info";
@@ -38,7 +35,6 @@ export default function useExpenses() {
   const [pageChangeTrigger, setPageChangeTrigger] = useState(false);
 
   const { expenseGroups, fetchExpenseGroups } = useExpenseGroups();
-  const { categories } = useExpenseCategory();
 
   const fetchSummary = () => {
     execute(() => expenseApi.querySummary(filter))
@@ -92,11 +88,9 @@ export default function useExpenses() {
     fetchExpenses();
   }, []);
 
-  const expensePieData: PieDataItem[] = [];
-  const incomePieData: PieDataItem[] = [];
+  const expensePieData = expenseSummary.expensePieDataItems || [];
+  const incomePieData = expenseSummary.incomePieDataItems || [];
   const expenses = expenseList || [];
-
-  calculatePieData(expenses, categories, expensePieData, incomePieData);
 
   return {
     expenses,

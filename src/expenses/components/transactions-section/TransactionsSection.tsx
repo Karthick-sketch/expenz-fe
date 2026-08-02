@@ -12,9 +12,9 @@ interface TransactionsSectionProps {
   expenseGroups?: ExpenseGroupList[];
   onCreateGroup?: () => void;
   categoryColors: Record<string, string>;
-  pageInfo: PageInfo;
-  nextPage: () => void;
-  prevPage: () => void;
+  pageInfo?: PageInfo;
+  nextPage?: () => void;
+  prevPage?: () => void;
 }
 
 function TransactionsSection({
@@ -74,7 +74,7 @@ function TransactionsSection({
             {recent && "Recent "}
             Transactions
           </span>
-          {!recent && (
+          {!recent && pageInfo && nextPage && prevPage && (
             <div className="card-pagination">
               <button onClick={prevPage}>
                 <svg

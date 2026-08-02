@@ -1,4 +1,5 @@
 import type { Expense } from "./expense";
+import { PieDataItem } from "./pie-data-item";
 
 interface ExpenseGroup {
   id: number;
@@ -10,6 +11,8 @@ interface ExpenseGroup {
   totalIncomesAmount: number;
   balanceAmount: number;
   expenses: Expense[];
+  expensePieDataItems: PieDataItem[];
+  incomePieDataItems: PieDataItem[];
 }
 
 interface ExpenseGroupList {

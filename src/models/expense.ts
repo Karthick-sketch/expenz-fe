@@ -1,3 +1,5 @@
+import { PieDataItem } from "./pie-data-item";
+
 interface Expense {
   id: number;
   title: string;
@@ -27,6 +29,8 @@ interface ExpenseSummary {
   totalExpensesAmount: number;
   totalIncomesAmount: number;
   balanceAmount: number;
+  expensePieDataItems: PieDataItem[];
+  incomePieDataItems: PieDataItem[];
 }
 
 interface ExpensePage {

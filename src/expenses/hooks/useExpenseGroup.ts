@@ -1,16 +1,24 @@
 import { useEffect, useState } from "react";
 import { expenseApi, execute, throwError } from "../api/expenseApi";
-import type { PieDataItem } from "../../models/pie-data-item";
 import type { ExpenseGroup } from "../../models/expense-group";
-import { calculatePieData } from "../util/expenseUtils";
-import useExpenseCategory from "./useExpenseCategory";
+
+const INITIATE: ExpenseGroup = {
+  id: 0,
+  title: "",
+  description: "",
+  totalExpensesCount: 0,
+  totalIncomesCount: 0,
+  totalExpensesAmount: 0,
+  totalIncomesAmount: 0,
+  balanceAmount: 0,
+  expenses: [],
+  expensePieDataItems: [],
+  incomePieDataItems: [],
+};
 
 export default function useExpenseGroup(id: string) {
-  const [expenseGroup, setExpenseGroup] = useState<ExpenseGroup>(
-    {} as ExpenseGroup,
-  );
+  const [expenseGroup, setExpenseGroup] = useState<ExpenseGroup>(INITIATE);
   const [showForm, setShowForm] = useState(false);
-  const { categories } = useExpenseCategory();
 
   const fetchExpenseGroup = () => {
     execute(() => expenseApi.getExpenseGroupById(id))
@@ -22,16 +30,9 @@ export default function useExpenseGroup(id: string) {
     fetchExpenseGroup();
   }, []);
 
-  const expensePieData: PieDataItem[] = [];
-  const incomePieData: PieDataItem[] = [];
+  const expensePieData = expenseGroup.expensePieDataItems || [];
+  const incomePieData = expenseGroup.incomePieDataItems || [];
   expenseGroup.expenses = expenseGroup.expenses || [];
-
-  calculatePieData(
-    expenseGroup.expenses,
-    categories,
-    expensePieData,
-    incomePieData,
-  );
 
   return {
     expenseGroup,

@@ -1,18 +1,24 @@
 import { useEffect, useState } from "react";
 import { expenseApi, execute, throwError } from "../api/expenseApi";
-import type { PieDataItem } from "../../models/pie-data-item";
 import type { DashboardData } from "../../models/dashboard-data";
 import useExpenseGroups from "./useExpenseGroups";
-import { calculatePieData } from "../util/expenseUtils";
-import useExpenseCategory from "./useExpenseCategory";
+
+const INITIATE: DashboardData = {
+  balance: 0,
+  totalExpenses: 0,
+  totalIncome: 0,
+  totalExpenseCount: 0,
+  totalIncomeCount: 0,
+  recentExpenses: [],
+  expensePieDataItems: [],
+  incomePieDataItems: [],
+};
 
 export default function useDashboard() {
-  const [dashboardData, setDashboardData] = useState<DashboardData>(
-    {} as DashboardData,
-  );
+  const [dashboardData, setDashboardData] = useState<DashboardData>(INITIATE);
   const [showForm, setShowForm] = useState(false);
+
   const { expenseGroups, fetchExpenseGroups } = useExpenseGroups();
-  const { categories } = useExpenseCategory();
 
   const fetchDashboardData = () => {
     execute(expenseApi.getDashboardData)
@@ -24,16 +30,9 @@ export default function useDashboard() {
     fetchDashboardData();
   }, []);
 
-  const expensePieData: PieDataItem[] = [];
-  const incomePieData: PieDataItem[] = [];
+  const expensePieData = dashboardData.expensePieDataItems || [];
+  const incomePieData = dashboardData.incomePieDataItems || [];
   dashboardData.recentExpenses = dashboardData.recentExpenses || [];
-
-  calculatePieData(
-    dashboardData.recentExpenses,
-    categories,
-    expensePieData,
-    incomePieData,
-  );
 
   return {
     dashboardData,
