@@ -1,10 +1,19 @@
 import { useEffect, useState } from "react";
 import { expenseApi, execute, throwError } from "../api/expenseApi";
-import useExpenseGroups from "./useExpenseGroups";
+import { ExpenseDuration, ExpenseType } from "../../enums/expense-enums";
 import type { Expense, ExpenseSummary } from "../../models/expense";
 import type { ExpenseFilter } from "../../models/expense-filter";
-import { ExpenseDuration, ExpenseType } from "../../enums/expense-enums";
-import { PageInfo } from "../../models/page-info";
+import type { PageInfo } from "../../models/page-info";
+
+const INITIATE_SUMMARY: ExpenseSummary = {
+  totalExpensesCount: 0,
+  totalIncomesCount: 0,
+  totalExpensesAmount: 0,
+  totalIncomesAmount: 0,
+  balanceAmount: 0,
+  expensePieDataItems: [],
+  incomePieDataItems: [],
+};
 
 const INITIATE: ExpenseFilter = {
   type: ExpenseType.ALL,
@@ -25,16 +34,13 @@ const INITIATE_PAGE_INFO: PageInfo = {
 };
 
 export default function useExpenses() {
-  const [expenseSummary, setExpenseSummary] = useState<ExpenseSummary>(
-    {} as ExpenseSummary,
-  );
+  const [expenseSummary, setExpenseSummary] =
+    useState<ExpenseSummary>(INITIATE_SUMMARY);
   const [expenseList, setExpenseList] = useState<Expense[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [filter, setFilter] = useState<ExpenseFilter>(INITIATE);
   const [pageInfo, setPageInfo] = useState<PageInfo>(INITIATE_PAGE_INFO);
   const [pageChangeTrigger, setPageChangeTrigger] = useState(false);
-
-  const { expenseGroups, fetchExpenseGroups } = useExpenseGroups();
 
   const fetchSummary = () => {
     execute(() => expenseApi.querySummary(filter))
@@ -94,18 +100,14 @@ export default function useExpenses() {
 
   return {
     expenses,
-    totalExpensesAmount: expenseSummary.totalExpensesAmount || 0,
-    totalIncomesAmount: expenseSummary.totalIncomesAmount || 0,
-    balanceAmount: expenseSummary.balanceAmount || 0,
+    summary: expenseSummary,
     showForm,
     setShowForm,
     filter,
     setFilter,
     fetchExpenses,
-    fetchExpenseGroups,
     expensePieData,
     incomePieData,
-    expenseGroups,
     pageInfo,
     nextPage,
     prevPage,

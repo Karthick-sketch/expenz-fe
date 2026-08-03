@@ -9,25 +9,29 @@ import type {
 import type {
   ExpenseGroup,
   ExpenseGroupCreate,
-  ExpenseGroupList,
+  ExpenseGroupPage,
 } from "../../models/expense-group";
 import type { DashboardData } from "../../models/dashboard-data";
 import type {
   ExpenseCategory,
   ExpenseSubCategory,
 } from "../../models/expense-category";
-import type { ExpenseFilter } from "../../models/expense-filter";
+import type {
+  ExpenseFilter,
+  ExpenseGroupFilter,
+} from "../../models/expense-filter";
 
 export const expenseApi = {
   // QUERY methods
-  querySummary: (filter: ExpenseFilter) =>
-    api.post<ExpenseSummary>("/expenses/query/summary", filter),
   queryExpenses: (filter: ExpenseFilter) =>
     api.post<ExpensePage>("/expenses/query", filter),
+  querySummary: (filter: ExpenseFilter) =>
+    api.post<ExpenseSummary>("/expenses/query/summary", filter),
+  queryExpenseGroups: (filter: ExpenseGroupFilter) =>
+    api.post<ExpenseGroupPage>("/expenses/query/groups", filter),
 
   // GET methods
   getExpenseById: (id: string) => api.get<Expense>(`/expenses/${id}`),
-  getExpenseGroups: () => api.get<ExpenseGroupList[]>("/expenses/groups"),
   getExpenseGroupById: (id: string) =>
     api.get<ExpenseGroup>(`/expenses/groups/${id}`),
   getDashboardData: () => api.get<DashboardData>("/expenses/dashboard"),

@@ -109,3 +109,77 @@
 .card-pagination .backward:hover {
   color: var(--accent);
 }
+
+/* ---- Tab bar: full-width row sitting on the card border ---- */
+.tab-bar {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ---- Flat tab list (no pill, no background) ---- */
+.tab-list {
+  display: flex;
+  align-items: stretch;
+}
+
+/* Individual tab button */
+.tab-btn {
+  position: relative;
+  padding: 0.7rem 1.1rem;
+  border: none;
+  background: transparent;
+  color: var(--text-3);
+  font-size: 0.82rem;
+  font-weight: 500;
+  font-family: "Inter", sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--transition), background var(--transition);
+  /* Border indicator drawn with ::after so it overlaps the card border-bottom */
+  display: flex;
+  align-items: center;
+}
+
+/* Bottom indicator line */
+.tab-btn::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;           /* sit exactly on top of the tab-bar border */
+  left: 0.75rem;
+  right: 0.75rem;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+/* Hover: subtle text brightening + faint tint */
+.tab-btn:hover {
+  color: var(--text-2);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Active tab */
+.tab-btn-active {
+  color: var(--text-1);
+  font-weight: 600;
+}
+
+.tab-btn-active::after {
+  opacity: 1;
+}
+
+/* Active hover — keep text bright, don't flash the bg */
+.tab-btn-active:hover {
+  background: transparent;
+  color: var(--text-1);
+}
+
+/* Pagination sits to the right, vertically centred in the bar */
+.tab-bar .card-pagination {
+  margin: auto 0;
+}

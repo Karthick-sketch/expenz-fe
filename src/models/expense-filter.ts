@@ -12,4 +12,9 @@ interface ExpenseFilter {
   size?: number;
 }
 
-export type { ExpenseFilter };
+interface ExpenseGroupFilter {
+  page?: number;
+  size?: number;
+}
+
+export type { ExpenseFilter, ExpenseGroupFilter };

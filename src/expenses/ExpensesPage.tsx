@@ -2,6 +2,7 @@ import "./ExpensesPage.css";
 import { useState } from "react";
 import useExpenses from "./hooks/useExpenses";
 import useExpenseCategory from "./hooks/useExpenseCategory";
+import useExpenseGroups from "./hooks/useExpenseGroups";
 import { CurrencyContext } from "./context/CurrencyContext";
 import AppLayout from "./app-layout/AppLayout";
 import PageHeader from "./components/page-header/PageHeader";
@@ -11,28 +12,31 @@ import ChartsRow from "./components/charts-row/ChartsRow";
 import TransactionsSection from "./components/transactions-section/TransactionsSection";
 import ExpenseFormModal from "./components/expense-form-modal/ExpenseFormModal";
 import ExpenseGroupFormModal from "./components/expense-group-form-modal/ExpenseGroupFormModal";
-import { User } from "../models/user";
+import type { User } from "../models/user";
 
 function ExpensesPage(user: User) {
   const [showGroupForm, setShowGroupForm] = useState(false);
   const {
     expenses,
-    totalExpensesAmount,
-    totalIncomesAmount,
-    balanceAmount,
+    summary,
     showForm,
     setShowForm,
     filter,
     setFilter,
     fetchExpenses,
-    fetchExpenseGroups,
     expensePieData,
     incomePieData,
-    expenseGroups,
     pageInfo,
     nextPage,
     prevPage,
   } = useExpenses();
+  const {
+    expenseGroups,
+    fetchExpenseGroups,
+    pageInfo: expenseGroupPageInfo,
+    nextPage: nextExpenseGroupPage,
+    prevPage: prevExpenseGroupPage,
+  } = useExpenseGroups();
   const { categoryColors, categories, subCategories, fetchSubCategories } =
     useExpenseCategory();
 
@@ -54,11 +58,11 @@ function ExpensesPage(user: User) {
             fetchExpenses={fetchExpenses}
           />
           <StatsRow
-            balance={balanceAmount}
-            totalExpenses={totalExpensesAmount}
-            totalIncome={totalIncomesAmount}
-            expenseCount={expenses.filter((e) => !e.income).length}
-            incomeCount={expenses.filter((e) => e.income).length}
+            balance={summary.balanceAmount}
+            totalExpenses={summary.totalExpensesAmount}
+            totalIncome={summary.totalIncomesAmount}
+            expenseCount={summary.totalExpensesCount}
+            incomeCount={summary.totalIncomesCount}
           />
           <ChartsRow
             expensePieData={expensePieData}
@@ -73,6 +77,9 @@ function ExpensesPage(user: User) {
             pageInfo={pageInfo}
             nextPage={nextPage}
             prevPage={prevPage}
+            expenseGroupPageInfo={expenseGroupPageInfo}
+            nextExpenseGroupPage={nextExpenseGroupPage}
+            prevExpenseGroupPage={prevExpenseGroupPage}
           />
         </main>
 

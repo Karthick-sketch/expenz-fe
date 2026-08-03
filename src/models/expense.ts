@@ -1,4 +1,4 @@
-import { PieDataItem } from "./pie-data-item";
+import type { PieDataItem } from "./pie-data-item";
 
 interface Expense {
   id: number;
